@@ -1,0 +1,255 @@
+<div class="induction-task stress-task">
+    <h1>🧩 Color Challenge</h1>
+
+    <div class="task-instructions">
+        <p><strong>Instructions:</strong></p>
+        <ul>
+            <li>Click the color name, NOT what the word says</li>
+            <li>Example: If you see <span style="color: red;">BLUE</span>, click RED</li>
+            <li>Complete as many as you can in 1 minute</li>
+            <li>Stay focused and react quickly!</li>
+        </ul>
+    </div>
+
+    <div class="timer-container">
+        <div class="timer" id="stress-timer">1:00</div>
+    </div>
+
+    <div class="score-display">
+        Score: <span id="stress-score">0</span>
+    </div>
+
+    <div class="game-area">
+        <div class="color-word" id="stress-word">READY?</div>
+        <div class="color-buttons">
+            <button class="color-btn" data-color="red" style="background: #e53935;" onclick="handleColorClick('red')">RED</button>
+            <button class="color-btn" data-color="blue" style="background: #1e88e5;" onclick="handleColorClick('blue')">BLUE</button>
+            <button class="color-btn" data-color="green" style="background: #43a047;" onclick="handleColorClick('green')">GREEN</button>
+            <button class="color-btn" data-color="yellow" style="background: #fdd835; color: #333;" onclick="handleColorClick('yellow')">YELLOW</button>
+        </div>
+    </div>
+
+    <div class="progress-indicator" id="stress-status">
+        <p>Click START to begin!</p>
+    </div>
+
+    <button class="start-btn" id="stress-start" onclick="startStressGame()">START GAME</button>
+
+    <style>
+        .induction-task {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 40px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .induction-task h1 {
+            color: #5e35b1;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        .task-instructions {
+            background: #f3e5f5;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border-left: 4px solid #7e57c2;
+        }
+
+        .timer-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .timer {
+            font-size: 48px;
+            font-weight: bold;
+            color: #5e35b1;
+            font-family: monospace;
+        }
+
+        .score-display {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 600;
+            color: #7e57c2;
+            margin-bottom: 20px;
+        }
+
+        .game-area {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .color-word {
+            font-size: 56px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .color-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .color-btn {
+            padding: 20px;
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .color-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+
+        .color-btn:active {
+            transform: translateY(0);
+        }
+
+        .start-btn {
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            margin: 20px auto 0;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #5e35b1, #7e57c2);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .start-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(94, 53, 177, 0.4);
+        }
+
+        .progress-indicator {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+
+        .progress-indicator p {
+            margin: 0;
+            color: #666;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .shake {
+            animation: shake 0.3s ease;
+        }
+    </style>
+
+    <script>
+        // Game state
+        let stressScore = 0;
+        let stressGameActive = false;
+        let stressTimeLeft = 60;
+        let stressTimer = null;
+
+        const stressColors = ['red', 'blue', 'green', 'yellow'];
+        const stressColorNames = ['RED', 'BLUE', 'GREEN', 'YELLOW'];
+        const stressColorValues = {
+            'red': '#e53935',
+            'blue': '#1e88e5',
+            'green': '#43a047',
+            'yellow': '#fdd835'
+        };
+
+        function generateStressChallenge() {
+            const wordIndex = Math.floor(Math.random() * stressColorNames.length);
+            const colorIndex = Math.floor(Math.random() * stressColors.length);
+
+            const wordEl = document.getElementById('stress-word');
+            wordEl.textContent = stressColorNames[wordIndex];
+            wordEl.style.color = stressColorValues[stressColors[colorIndex]];
+            wordEl.dataset.actualColor = stressColors[colorIndex];
+        }
+
+        function handleColorClick(selectedColor) {
+            if (!stressGameActive) {
+                startStressGame();
+                return;
+            }
+
+            const wordEl = document.getElementById('stress-word');
+            const actualColor = wordEl.dataset.actualColor;
+            const scoreEl = document.getElementById('stress-score');
+
+            if (selectedColor === actualColor) {
+                stressScore++;
+                scoreEl.textContent = stressScore;
+                generateStressChallenge();
+            } else {
+                wordEl.classList.add('shake');
+                setTimeout(() => {
+                    wordEl.classList.remove('shake');
+                }, 300);
+            }
+        }
+
+        function startStressGame() {
+            if (stressGameActive) return;
+
+            stressGameActive = true;
+            stressScore = 0;
+            stressTimeLeft = 60;
+
+            document.getElementById('stress-score').textContent = stressScore;
+            document.getElementById('stress-start').style.display = 'none';
+            document.getElementById('stress-status').innerHTML = '<p>Quick! Click the color of the text!</p>';
+
+            generateStressChallenge();
+
+            stressTimer = setInterval(() => {
+                stressTimeLeft--;
+                const mins = Math.floor(stressTimeLeft / 60);
+                const secs = stressTimeLeft % 60;
+                document.getElementById('stress-timer').textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+
+                if (stressTimeLeft <= 0) {
+                    clearInterval(stressTimer);
+                    endStressGame();
+                }
+            }, 1000);
+        }
+
+        function endStressGame() {
+            stressGameActive = false;
+            const wordEl = document.getElementById('stress-word');
+            wordEl.textContent = `Score: ${stressScore}`;
+            wordEl.style.color = '#5e35b1';
+            document.getElementById('stress-status').innerHTML = '<p>Great job! Moving to music recommendations...</p>';
+        }
+    </script>
+</div>

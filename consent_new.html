@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="-1">
+    <title></title>
+    <link rel="stylesheet" href="static/css/style.css">
+    
+</head>
+<body>
+
+<div style="background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 20px; text-align: center; font-size: 14px; position: sticky; top: 0; z-index: 10000; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+    <strong>Demo Mode</strong> - Static demonstration of New Study flow. Data not saved.
+    <a href="https://github.com/yourusername/music_privacy_prototype" target="_blank" style="color: #ffd700; margin-left: 15px; text-decoration: underline;">View Source</a>
+</div>
+
+    <div class="container">
+        
+<style>
+.consent-content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: left;
+    line-height: 1.8;
+}
+
+.consent-content h2 {
+    color: #28a745;
+    border-bottom: 2px solid #28a745;
+    padding-bottom: 10px;
+    margin-top: 30px;
+}
+
+.consent-content h3 {
+    color: #333;
+    margin-top: 25px;
+}
+
+.consent-box {
+    background: #f8f9fa;
+    border-left: 4px solid #28a745;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.warning-box {
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.consent-form {
+    background: #f8f9fa;
+    padding: 30px;
+    border-radius: 10px;
+    margin-top: 40px;
+}
+
+.consent-option {
+    margin: 15px 0;
+    padding: 15px;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.consent-option:hover {
+    border-color: #007bff;
+    background: #f8f9fa;
+}
+
+.consent-option input[type="radio"] {
+    margin-right: 10px;
+}
+
+.consent-option label {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-item {
+    margin: 10px 0;
+}
+
+.checkbox-item input {
+    margin-right: 10px;
+}
+</style>
+
+<div class="consent-content">
+    <h1>Informed Consent - Physiological State Study</h1>
+
+    <div class="consent-box">
+        <strong>Study Title:</strong> Physiological State-Aware Recommendations and Privacy Protection<br>
+        <strong>Principal Investigator:</strong> [Your Name]<br>
+        <strong>Institution:</strong> [Your Institution]<br>
+        <strong>Contact:</strong> [Your Email]
+    </div>
+
+    <h2>Purpose of the Study</h2>
+    <p>
+        You are invited to participate in a research study investigating how recommendation systems
+        adapt to users' physiological states and how to protect privacy in such systems.
+        This study involves measuring your heart rate during different tasks and examining
+        how recommendation content may reveal your stress state.
+    </p>
+
+    <h2>What You Will Do</h2>
+    <ol>
+        <li><strong>Baseline Questionnaire (5 min):</strong> Answer questions about your stress levels, demographics, and preferences</li>
+        <li><strong>Heart Rate Setup (5 min):</strong> Connect a heart rate monitor (or use simulated data)</li>
+        <li><strong>Session 1-3 (10 min each):</strong>
+            <ul>
+                <li>Complete a brief attention task</li>
+                <li>During the task, a mild stressor may be presented (unexpected alert)</li>
+                <li>Browse recommended content while your heart rate is monitored</li>
+                <li>Rate your experience</li>
+            </ul>
+        </li>
+        <li><strong>Final Survey (5 min):</strong> Provide feedback on your experience</li>
+    </ol>
+
+    <h2>Heart Rate Monitoring</h2>
+    <div class="warning-box">
+        <strong>Important:</strong> This study uses heart rate data to detect stress states.
+        You have two options:
+        <ul>
+            <li><strong>Option A:</strong> Use a Bluetooth heart rate monitor (Polar H10, Apple Watch, etc.)</li>
+            <li><strong>Option B:</strong> Use simulated heart rate data for testing purposes</li>
+        </ul>
+        Your heart rate data will be stored securely and anonymized.
+    </div>
+
+    <h2>Risks and Discomforts</h2>
+    <ul>
+        <li><strong>Mild stress:</strong> During attention tasks, you may experience brief, unexpected alerts that could startle you</li>
+        <li><strong>Privacy concerns:</strong> The study is designed to test privacy protection - we will NOT actually monitor you outside this session</li>
+        <li><strong>Time commitment:</strong> Approximately 40-45 minutes</li>
+    </ul>
+    <p>
+        The stress induced is minimal and similar to everyday surprises. You can withdraw at any time.
+    </p>
+
+    <h2>Benefits</h2>
+    <ul>
+        <li>Compensation: $15 gift card (or equivalent course credit)</li>
+        <li>Contribution to research on privacy-preserving recommendation systems</li>
+        <li>Learn about how physiological data can be protected in AI systems</li>
+    </ul>
+
+    <h2>Confidentiality</h2>
+    <p>
+        Your data will be:
+    </p>
+    <ul>
+        <li>Stored with an anonymous participant ID (not your name)</li>
+        <li>Kept on secure, encrypted servers</li>
+        <li>Used only for research purposes</li>
+        <li>Published only in aggregate form (no individual identification)</li>
+    </ul>
+
+    <h2>Deception and Debriefing</h2>
+    <div class="warning-box">
+        <strong>Note on Deception:</strong> This study uses mild deception. The attention task
+        includes unexpected elements designed to induce brief stress. The full purpose of the
+        study will be explained at the end. If you prefer not to participate in a study with
+        deception, please decline.
+    </div>
+
+    <h2>Voluntary Participation</h2>
+    <p>
+        Your participation is completely voluntary. You may:
+    </p>
+    <ul>
+        <li>Skip any questions you don't want to answer</li>
+        <li>Withdraw at any time without penalty</li>
+        <li>Request your data be deleted after participation</li>
+    </ul>
+
+    <h2>Contact Information</h2>
+    <p>
+        If you have questions about:
+    </p>
+    <ul>
+        <li><strong>The study:</strong> [Your Email]</li>
+        <li><strong>Your rights as a participant:</strong> [IRB Contact]</li>
+    </ul>
+
+    <form method="POST" class="consent-form">
+        <h3>Consent Confirmation</h3>
+
+        <div class="checkbox-item">
+            <label>
+                <input type="checkbox" name="understand_purpose" required>
+                I understand the purpose of this study and what I will be asked to do
+            </label>
+        </div>
+
+        <div class="checkbox-item">
+            <label>
+                <input type="checkbox" name="understand_hr" required>
+                I understand that my heart rate will be monitored (or simulated) during the study
+            </label>
+        </div>
+
+        <div class="checkbox-item">
+            <label>
+                <input type="checkbox" name="understand_stress" required>
+                I understand that I may experience brief, mild stress during the tasks
+            </label>
+        </div>
+
+        <div class="checkbox-item">
+            <label>
+                <input type="checkbox" name="understand_voluntary" required>
+                I understand that my participation is voluntary and I can withdraw at any time
+            </label>
+        </div>
+
+        <h3 style="margin-top: 30px;">Do you consent to participate?</h3>
+
+        <div class="consent-option">
+            <label>
+                <input type="radio" name="consent_given" value="yes" required>
+                <strong>Yes, I consent to participate</strong> - I have read and understood the information above
+            </label>
+        </div>
+
+        <div class="consent-option">
+            <label>
+                <input type="radio" name="consent_given" value="no">
+                <strong>No, I do not consent</strong> - I do not wish to participate
+            </label>
+        </div>
+
+        <div style="margin-top: 30px; text-align: center;">
+            <button type="submit" class="btn btn-primary btn-large">
+                Continue
+            </button>
+        </div>
+    </form>
+</div>
+
+    </div>
+    
+
+<script>
+/**
+ * SessionManager - Manages New Study flow state
+ * Matches Flask session behavior
+ */
+const SessionManager = {
+    init() {
+        let state = this.getState();
+        if (!state || !state.started) {
+            state = this.createNewFlow();
+        }
+        this.applyToPage(state);
+    },
+
+    getState() {
+        try {
+            return JSON.parse(localStorage.getItem('newStudyFlow'));
+        } catch {
+            return null;
+        }
+    },
+
+    saveState(state) {
+        localStorage.setItem('newStudyFlow', JSON.stringify(state));
+    },
+
+    createNewFlow() {
+        // Randomize condition order (matching Flask)
+        const conditions = ['baseline_r', 'ra_mix', 'state_agnostic'];
+        // For demo: use fixed order
+        const state = {
+            started: true,
+            participantId: 'P' + Math.random().toString(36).substr(2, 6).toUpperCase(),
+            currentSession: 1,
+            conditionOrder: conditions,
+            inductionMethods: ['visual', 'auditory', 'cognitive'],
+            startTime: new Date().toISOString()
+        };
+        this.saveState(state);
+        return state;
+    },
+
+    applyToPage(state) {
+        // Update session display
+        document.querySelectorAll('[data-session-display]').forEach(el => {
+            el.textContent = `Session ${state.currentSession} of 3`;
+        });
+
+        // Update condition
+        const condition = state.conditionOrder[state.currentSession - 1];
+        document.querySelectorAll('[data-condition-display]').forEach(el => {
+            el.textContent = condition === 'baseline_r' ? 'Baseline-R (No Privacy)' :
+                             condition === 'ra_mix' ? 'RA+Mix (Privacy-Preserving)' :
+                             'State-Agnostic (Maximum Privacy)';
+        });
+
+        // Update step dots
+        document.querySelectorAll('.step-dot').forEach((dot, idx) => {
+            dot.classList.remove('completed', 'active');
+            if (idx + 1 < state.currentSession) dot.classList.add('completed');
+            else if (idx + 1 === state.currentSession) dot.classList.add('active');
+        });
+
+        // Update SESSION_NUM and CONDITION JS variables if they exist
+        if (typeof SESSION_NUM !== 'undefined') {
+            window.SESSION_NUM = state.currentSession;
+        }
+        if (typeof CONDITION !== 'undefined') {
+            window.CONDITION = condition;
+        }
+    },
+
+    nextSession() {
+        const state = this.getState();
+        if (state.currentSession >= 3) {
+            return 'post_survey.html';
+        } else {
+            state.currentSession++;
+            this.saveState(state);
+            return 'attention_test.html';
+        }
+    },
+
+    reset() {
+        localStorage.removeItem('newStudyFlow');
+    }
+};
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+    SessionManager.init();
+});
+
+// Expose for debugging
+window.SessionManager = SessionManager;
+</script>
+
+<script>
+/**
+ * API Mock - Simulates Flask backend
+ */
+const APIMock = {
+    // WESAD catalog items (12 items from paper)
+    wesadItems: [
+        {id: 'I1', name: 'Deep Breathing Exercise', category: 'wellness', sensitivity: 0.9, utility_stress: 0.95, utility_baseline: 0.3},
+        {id: 'I2', name: 'Progressive Muscle Relaxation', category: 'wellness', sensitivity: 0.85, utility_stress: 0.90, utility_baseline: 0.35},
+        {id: 'I3', name: 'Mindfulness Meditation', category: 'wellness', sensitivity: 0.8, utility_stress: 0.88, utility_baseline: 0.4},
+        {id: 'I4', name: 'Calm Music Playlist', category: 'wellness', sensitivity: 0.75, utility_stress: 0.85, utility_baseline: 0.45},
+        {id: 'I5', name: 'Guided Visualization', category: 'wellness', sensitivity: 0.7, utility_stress: 0.82, utility_baseline: 0.5},
+        {id: 'I6', name: 'Gentle Stretching', category: 'wellness', sensitivity: 0.65, utility_stress: 0.78, utility_baseline: 0.55},
+        {id: 'I7', name: 'Task Manager Tool', category: 'productivity', sensitivity: 0.3, utility_stress: 0.4, utility_baseline: 0.9},
+        {id: 'I8', name: 'Email Template Library', category: 'productivity', sensitivity: 0.25, utility_stress: 0.35, utility_baseline: 0.88},
+        {id: 'I9', name: 'Meeting Scheduler', category: 'productivity', sensitivity: 0.2, utility_stress: 0.3, utility_baseline: 0.85},
+        {id: 'I10', name: 'Social Media Feed', category: 'social', sensitivity: 0.4, utility_stress: 0.5, utility_baseline: 0.8},
+        {id: 'I11', name: 'Stress Tracking Dashboard', category: 'high_sens', sensitivity: 1.0, utility_stress: 0.95, utility_baseline: 0.2},
+        {id: 'I12', name: 'Mood Journal', category: 'high_sens', sensitivity: 0.95, utility_stress: 0.92, utility_baseline: 0.25}
+    ],
+
+    getRecommendations(condition, state, top_k=12) {
+        const items = [...this.wesadItems];
+        let result = [];
+
+        if (condition === 'baseline_r') {
+            // Pure stress-based: I1-I6 first
+            result = items.filter(i => i.category === 'wellness')
+                          .sort((a, b) => b.utility_stress - a.utility_stress);
+        } else if (condition === 'state_agnostic') {
+            // Fixed: productivity + high-sens mix
+            result = items.filter(i => i.category === 'productivity' || i.category === 'high_sens')
+                          .sort(() => Math.random() - 0.5);
+        } else {
+            // ra_mix: diverse mix
+            result = [
+                items.find(i => i.id === 'I2'),
+                items.find(i => i.id === 'I3'),
+                items.find(i => i.id === 'I7'),
+                items.find(i => i.id === 'I8'),
+                items.find(i => i.id === 'I9'),
+                items.find(i => i.id === 'I10'),
+                items.find(i => i.id === 'I1'),
+                items.find(i => i.id === 'I5')
+            ];
+        }
+
+        return result.slice(0, top_k);
+    }
+};
+
+// Override fetch
+const _originalFetch = window.fetch;
+window.fetch = function(url, options) {
+    console.log('[API Mock]', url);
+
+    // WESAD recommendations
+    if (url.includes('/api/wesad_recommendations')) {
+        const params = new URLSearchParams(url.split('?')[1]);
+        const condition = params.get('condition') || 'baseline_r';
+        const state = params.get('state') || 'stress';
+
+        const recs = APIMock.getRecommendations(condition, state);
+
+        return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({
+                recommendations: recs,
+                condition: condition,
+                state: state
+            })
+        });
+    }
+
+    // Log event
+    if (url.includes('/api/log_event') || url.includes('/api/wesad_log_event')) {
+        return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({status: 'logged', success: true})
+        });
+    }
+
+    // Session endpoints
+    if (url.includes('/session/')) {
+        return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({success: true, session_id: 'demo_' + Date.now()})
+        });
+    }
+
+    // Induction trigger
+    if (url.includes('/induction_trigger/')) {
+        const state = SessionManager.getState();
+        const condition = state.conditionOrder[state.currentSession - 1];
+
+        return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({
+                status: 'induction_triggered',
+                session_num: state.currentSession,
+                condition: condition,
+                redirect: 'content_browsing.html'
+            })
+        });
+    }
+
+    // Feedback
+    if (url.includes('/api/session_feedback')) {
+        return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({status: 'success'})
+        });
+    }
+
+    return _originalFetch.apply(this, arguments);
+};
+</script>
+
+<script>
+// Form and button navigation
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle forms
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            const consent = formData.get('consent_given');
+            const currentPage = window.location.pathname.split('/').pop();
+
+            let nextPage = '';
+
+            // Matching Flask routes exactly
+            if (currentPage === 'consent_new.html') {
+                nextPage = consent === 'yes' ? 'baseline_new.html' : 'consent_declined.html';
+            } else if (currentPage === 'baseline_new.html') {
+                nextPage = 'instructions_blind.html';
+            } else if (currentPage === 'post_survey.html') {
+                nextPage = 'debrief.html';
+            } else {
+                nextPage = 'index.html';
+            }
+
+            console.log('[NAV] Form:', currentPage, '->', nextPage);
+            window.location.href = nextPage;
+        });
+    });
+
+    // Handle goToNext in content_browsing
+    if (typeof goToNext === 'function') {
+        const originalGoToNext = goToNext;
+        window.goToNext = function() {
+            const nextPage = SessionManager.nextSession();
+            console.log('[NAV] goToNext ->', nextPage);
+            window.location.href = nextPage;
+        };
+    }
+});
+</script>
+</body>
+</html>

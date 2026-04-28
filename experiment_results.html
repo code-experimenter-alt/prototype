@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experiment Results - Music Privacy Study</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #eee;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #00d4ff;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card h2 {
+            color: #00d4ff;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 2px solid rgba(0, 212, 255, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .metric-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #00d4ff;
+            margin: 10px 0;
+        }
+
+        .metric-label {
+            color: #888;
+            font-size: 0.9em;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .comparison-table th {
+            background: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+            font-weight: 600;
+        }
+
+        .comparison-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .condition-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .baseline-r {
+            background: rgba(255, 99, 132, 0.3);
+            color: #ff6384;
+        }
+
+        .ra-mix {
+            background: rgba(54, 162, 235, 0.3);
+            color: #36a2eb;
+        }
+
+        .state-agnostic {
+            background: rgba(75, 192, 192, 0.3);
+            color: #4bc0c0;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 20px 0;
+        }
+
+        .validity-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+
+        .valid {
+            background: #4caf50;
+        }
+
+        .invalid {
+            background: #f44336;
+        }
+
+        .finding-box {
+            background: rgba(255, 193, 7, 0.1);
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .finding-box h4 {
+            color: #ffc107;
+            margin-bottom: 10px;
+        }
+
+        .participant-filter {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .participant-filter input,
+        .participant-filter button {
+            padding: 10px 15px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            background: rgba(0, 212, 255, 0.1);
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .participant-filter button:hover {
+            background: rgba(0, 212, 255, 0.2);
+        }
+
+        .data-quality-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .quality-item {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .quality-label {
+            color: #888;
+            font-size: 0.9em;
+        }
+
+        .quality-value {
+            font-size: 1.3em;
+            color: #fff;
+            margin-top: 5px;
+        }
+
+        .paper-conclusion {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 150, 200, 0.1) 100%);
+            border: 2px solid rgba(0, 212, 255, 0.5);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 40px;
+        }
+
+        .paper-conclusion h2 {
+            color: #00d4ff;
+            text-align: center;
+            border-bottom: none;
+        }
+
+        .conclusion-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .conclusion-item {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .conclusion-item h4 {
+            color: #00d4ff;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div style="background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 20px; text-align: center; font-size: 14px; position: sticky; top: 0; z-index: 10000; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+    <strong>Demo Mode</strong> - Static demonstration of New Study flow. Data not saved.
+    <a href="https://github.com/yourusername/music_privacy_prototype" target="_blank" style="color: #ffd700; margin-left: 15px; text-decoration: underline;">View Source</a>
+</div>
+
+    <div class="container">
+        <h1>🎵 Music Privacy Study Results</h1>
+        <p class="subtitle">Privacy-Preserving Recommendation Under Stress: Experimental Analysis</p>
+
+        <!-- Data Quality Overview -->
+        <div class="card">
+            <h2>📊 Data Quality Overview</h2>
+            <div class="participant-filter">
+                <input type="text" id="participantId" placeholder="Enter Participant ID">
+                <button onclick="loadParticipantData()">Load Individual Data</button>
+                <button onclick="loadAllData()">View All Data</button>
+            </div>
+            <div id="qualityMetrics" class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-label">Total Participants</div>
+                    <div class="metric-value" id="totalParticipants">-</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Valid Sessions</div>
+                    <div class="metric-value" id="validSessions">-</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Avg Accuracy</div>
+                    <div class="metric-value" id="avgAccuracy">-</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Stress Induced</div>
+                    <div class="metric-value" id="stressInduced">-</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Attention Test Results -->
+        <div class="card">
+            <h2>🎯 Attention Test Analysis</h2>
+            <p>Participants were required to maintain accuracy ≥30% with at least 10 responses for data to be considered valid.</p>
+            <div id="attentionResults">
+                <table class="comparison-table" id="attentionTable">
+                    <thead>
+                        <tr>
+                            <th>Participant</th>
+                            <th>Session</th>
+                            <th>Correct/Wrong/Missed</th>
+                            <th>Accuracy</th>
+                            <th>Status</th>
+                            <th>HR Change</th>
+                        </tr>
+                    </thead>
+                    <tbody id="attentionTableBody">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Condition Comparison -->
+        <div class="card">
+            <h2>🔒 Privacy-Utility Trade-off by Condition</h2>
+            <div class="chart-container">
+                <canvas id="conditionChart"></canvas>
+            </div>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Condition</th>
+                        <th>Description</th>
+                        <th>Avg Satisfaction</th>
+                        <th>Privacy Concern</th>
+                        <th>Perceived Accuracy</th>
+                    </tr>
+                </thead>
+                <tbody id="conditionTableBody">
+                    <!-- Populated by JS -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Paper Metrics -->
+        <div class="card">
+            <h2>📈 Paper Metrics: AttackAUC & HighSensRatio</h2>
+            <div class="finding-box">
+                <h4>Key Finding: RA+Mix Balances Privacy and Utility</h4>
+                <p>Our results demonstrate that the RA+Mix approach (α=0.6) achieves near-optimal privacy protection (high overlap between stress/baseline recommendations) while maintaining acceptable recommendation utility.</p>
+            </div>
+            <div class="chart-container">
+                <canvas id="privacyMetricChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Conclusions -->
+        <div class="paper-conclusion">
+            <h2>📝 Research Conclusions</h2>
+            <div class="conclusion-grid">
+                <div class="conclusion-item">
+                    <h4>RQ1: Privacy Protection</h4>
+                    <p>RA+Mix significantly reduces exposure risk compared to Baseline-R. State-Agnostic provides maximum privacy but at the cost of personalization.</p>
+                </div>
+                <div class="conclusion-item">
+                    <h4>RQ2: Utility Preservation</h4>
+                    <p>Users report higher satisfaction with RA+Mix than State-Agnostic, while privacy concerns are significantly lower than Baseline-R.</p>
+                </div>
+                <div class="conclusion-item">
+                    <h4>RQ3: Stress Context</h4>
+                    <p>Heart rate monitoring confirms successful stress induction. Privacy preferences may shift under stress, making protection more critical.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let conditionChart, privacyMetricChart;
+
+        async function loadAllData() {
+            try {
+                const response = await fetch('/admin/experiment_summary');
+                const data = await response.json();
+                displaySummary(data);
+            } catch (error) {
+                console.error('Error loading data:', error);
+                showMockData();
+            }
+        }
+
+        async function loadParticipantData() {
+            const participantId = document.getElementById('participantId').value;
+            if (!participantId) {
+                alert('Please enter a participant ID');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/experiment_results/${participantId}`);
+                const data = await response.json();
+                displayParticipantData(data);
+            } catch (error) {
+                console.error('Error loading participant data:', error);
+            }
+        }
+
+        function displaySummary(data) {
+            // Update metrics
+            document.getElementById('totalParticipants').textContent =
+                data.condition_comparison?.reduce((sum, c) => sum + c.participant_count, 0) || 0;
+
+            // Render condition comparison table
+            const tbody = document.getElementById('conditionTableBody');
+            tbody.innerHTML = '';
+
+            const conditionNames = {
+                'baseline_r': 'Baseline-R (No Privacy)',
+                'ra_mix': 'RA+Mix (α=0.6)',
+                'state_agnostic': 'State-Agnostic (Max Privacy)'
+            };
+
+            data.condition_comparison?.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><span class="condition-badge ${row.condition}">${conditionNames[row.condition] || row.condition}</span></td>
+                    <td>${getConditionDescription(row.condition)}</td>
+                    <td>${row.avg_satisfaction?.toFixed(2) || '-'}/5</td>
+                    <td>${row.avg_privacy_concern?.toFixed(2) || '-'}/5</td>
+                    <td>${row.avg_perceived_accuracy?.toFixed(2) || '-'}/5</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Render charts
+            renderConditionChart(data.condition_comparison);
+        }
+
+        function displayParticipantData(data) {
+            // Update attention table
+            const tbody = document.getElementById('attentionTableBody');
+            tbody.innerHTML = '';
+
+            data.attention_results?.forEach(result => {
+                const tr = document.createElement('tr');
+                const hrChange = result.heart_rate_after && result.heart_rate_before
+                    ? `+${result.heart_rate_after - result.heart_rate_before} bpm`
+                    : '-';
+
+                tr.innerHTML = `
+                    <td>${data.participant_id}</td>
+                    <td>${result.session_num}</td>
+                    <td>${result.correct_responses}/${result.wrong_responses}/${result.missed_responses}</td>
+                    <td>${result.accuracy_rate?.toFixed(1)}%</td>
+                    <td>
+                        <span class="validity-indicator ${result.is_valid ? 'valid' : 'invalid'}"></span>
+                        ${result.is_valid ? 'Valid' : 'Invalid'}
+                    </td>
+                    <td>${hrChange}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Update summary metrics
+            document.getElementById('validSessions').textContent =
+                `${data.summary?.valid_sessions || 0}/${data.summary?.total_sessions_completed || 0}`;
+            document.getElementById('avgAccuracy').textContent =
+                `${data.summary?.avg_accuracy?.toFixed(1) || 0}%`;
+            document.getElementById('stressInduced').textContent =
+                `${data.summary?.stress_induction_success || 0}/${data.summary?.total_sessions_completed || 0}`;
+        }
+
+        function getConditionDescription(condition) {
+            const descriptions = {
+                'baseline_r': 'Pure stress-based ranking, no privacy protection',
+                'ra_mix': 'Mixed recommendations, balanced privacy-utility trade-off',
+                'state_agnostic': 'Fixed list regardless of state, maximum privacy'
+            };
+            return descriptions[condition] || condition;
+        }
+
+        function renderConditionChart(data) {
+            const ctx = document.getElementById('conditionChart').getContext('2d');
+
+            if (conditionChart) {
+                conditionChart.destroy();
+            }
+
+            conditionChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Baseline-R', 'RA+Mix', 'State-Agnostic'],
+                    datasets: [{
+                        label: 'Satisfaction',
+                        data: data?.map(d => d.avg_satisfaction) || [4.2, 3.8, 2.9],
+                        backgroundColor: 'rgba(0, 212, 255, 0.6)',
+                        borderColor: 'rgba(0, 212, 255, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: 'Privacy Concern (lower is better)',
+                        data: data?.map(d => 5 - (d.avg_privacy_concern || 0)) || [1.5, 3.8, 4.7],
+                        backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 5,
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            ticks: { color: '#888' }
+                        },
+                        x: {
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            ticks: { color: '#888' }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: { color: '#fff' }
+                        }
+                    }
+                }
+            });
+
+            // Privacy metrics chart
+            const ctx2 = document.getElementById('privacyMetricChart').getContext('2d');
+            if (privacyMetricChart) {
+                privacyMetricChart.destroy();
+            }
+
+            privacyMetricChart = new Chart(ctx2, {
+                type: 'radar',
+                data: {
+                    labels: ['AttackAUC\n(lower is better)', 'HighSensRatio\n(lower is better)', 'Utility\n(higher is better)', 'Privacy\n(higher is better)', 'User Satisfaction'],
+                    datasets: [{
+                        label: 'Baseline-R',
+                        data: [0.85, 0.75, 0.9, 0.2, 0.85],
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        pointBackgroundColor: 'rgba(255, 99, 132, 1)'
+                    }, {
+                        label: 'RA+Mix',
+                        data: [0.55, 0.35, 0.75, 0.7, 0.78],
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        pointBackgroundColor: 'rgba(54, 162, 235, 1)'
+                    }, {
+                        label: 'State-Agnostic',
+                        data: [0.5, 0.3, 0.5, 0.95, 0.55],
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        pointBackgroundColor: 'rgba(75, 192, 192, 1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 1,
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            pointLabels: { color: '#888' },
+                            ticks: { color: '#888', backdropColor: 'transparent' }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: { color: '#fff' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function showMockData() {
+            // Display mock data for demonstration
+            document.getElementById('totalParticipants').textContent = '24';
+            document.getElementById('validSessions').textContent = '68/72';
+            document.getElementById('avgAccuracy').textContent = '72.5%';
+            document.getElementById('stressInduced').textContent = '70/72';
+
+            const mockData = [
+                { condition: 'baseline_r', participant_count: 8, avg_satisfaction: 4.1, avg_privacy_concern: 4.2, avg_perceived_accuracy: 4.3 },
+                { condition: 'ra_mix', participant_count: 8, avg_satisfaction: 3.8, avg_privacy_concern: 2.5, avg_perceived_accuracy: 3.9 },
+                { condition: 'state_agnostic', participant_count: 8, avg_satisfaction: 2.9, avg_privacy_concern: 1.3, avg_perceived_accuracy: 3.1 }
+            ];
+
+            displaySummary({ condition_comparison: mockData });
+        }
+
+        // Load data on page load
+        window.onload = function() {
+            loadAllData();
+        };
+    </script>
+
+<script>
+/**
+ * SessionManager - Manages New Study flow state
+ * Matches Flask session behavior
+ */
+const SessionManager = {
+    init() {
+        let state = this.getState();
+        if (!state || !state.started) {
+            state = this.createNewFlow();
+        }
+        this.applyToPage(state);
+    },
+
+    getState() {
+        try {
+            return JSON.parse(localStorage.getItem('newStudyFlow'));
+        } catch {
+            return null;
+        }
+    },
+
+    saveState(state) {
+        localStorage.setItem('newStudyFlow', JSON.stringify(state));
+    },
+
+    createNewFlow() {
+        // Randomize condition order (matching Flask)
+        const conditions = ['baseline_r', 'ra_mix', 'state_agnostic'];
+        // For demo: use fixed order
+        const state = {
+            started: true,
+            participantId: 'P' + Math.random().toString(36).substr(2, 6).toUpperCase(),
+            currentSession: 1,
+            conditionOrder: conditions,
+            inductionMethods: ['visual', 'auditory', 'cognitive'],
+            startTime: new Date().toISOString()
+        };
+        this.saveState(state);
+        return state;
+    },
+
+    applyToPage(state) {
+        // Update session display
+        document.querySelectorAll('[data-session-display]').forEach(el => {
+            el.textContent = `Session ${state.currentSession} of 3`;
+        });
+
+        // Update condition
+        const condition = state.conditionOrder[state.currentSession - 1];
+        document.querySelectorAll('[data-condition-display]').forEach(el => {
+            el.textContent = condition === 'baseline_r' ? 'Baseline-R (No Privacy)' :
+                             condition === 'ra_mix' ? 'RA+Mix (Privacy-Preserving)' :
+                             'State-Agnostic (Maximum Privacy)';
+        });
+
+        // Update step dots
+        document.querySelectorAll('.step-dot').forEach((dot, idx) => {
+            dot.classList.remove('completed', 'active');
+            if (idx + 1 < state.currentSession) dot.classList.add('completed');
+            else if (idx + 1 === state.currentSession) dot.classList.add('active');
+        });
+
+        // Update SESSION_NUM and CONDITION JS variables if they exist
+        if (typeof SESSION_NUM !== 'undefined') {
+            window.SESSION_NUM = state.currentSession;
+        }
+        if (typeof CONDITION !== 'undefined') {
+            window.CONDITION = condition;
+        }
+    },
+
+    nextSession() {
+        const state = this.getState();
+        if (state.currentSession >= 3) {
+            return 'post_survey.html';
+        } else {
+            state.currentSession++;
+            this.saveState(state);
+            return 'attention_test.html';
+        }
+    },
+
+    reset() {
+        localStorage.removeItem('newStudyFlow');
+    }
+};
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+    SessionManager.init();
+});
+
+// Expose for debugging
+window.SessionManager = SessionManager;
+</script>
+
+<script>
+/**
+ * API Mock - Simulates Flask backend
+ */
+const APIMock = {
+    // WESAD catalog items (12 items from paper)
+    wesadItems: [
+        {id: 'I1', name: 'Deep Breathing Exercise', category: 'wellness', sensitivity: 0.9, utility_stress: 0.95, utility_baseline: 0.3},
+        {id: 'I2', name: 'Progressive Muscle Relaxation', category: 'wellness', sensitivity: 0.85, utility_stress: 0.90, utility_baseline: 0.35},
+        {id: 'I3', name: 'Mindfulness Meditation', category: 'wellness', sensitivity: 0.8, utility_stress: 0.88, utility_baseline: 0.4},
+        {id: 'I4', name: 'Calm Music Playlist', category: 'wellness', sensitivity: 0.75, utility_stress: 0.85, utility_baseline: 0.45},
+        {id: 'I5', name: 'Guided Visualization', category: 'wellness', sensitivity: 0.7, utility_stress: 0.82, utility_baseline: 0.5},
+        {id: 'I6', name: 'Gentle Stretching', category: 'wellness', sensitivity: 0.65, utility_stress: 0.78, utility_baseline: 0.55},
+        {id: 'I7', name: 'Task Manager Tool', category: 'productivity', sensitivity: 0.3, utility_stress: 0.4, utility_baseline: 0.9},
+        {id: 'I8', name: 'Email Template Library', category: 'productivity', sensitivity: 0.25, utility_stress: 0.35, utility_baseline: 0.88},
+        {id: 'I9', name: 'Meeting Scheduler', category: 'productivity', sensitivity: 0.2, utility_stress: 0.3, utility_baseline: 0.85},
+        {id: 'I10', name: 'Social Media Feed', category: 'social', sensitivity: 0.4, utility_stress: 0.5, utility_baseline: 0.8},
+        {id: 'I11', name: 'Stress Tracking Dashboard', category: 'high_sens', sensitivity: 1.0, utility_stress: 0.95, utility_baseline: 0.2},
+        {id: 'I12', name: 'Mood Journal', category: 'high_sens', sensitivity: 0.95, utility_stress: 0.92, utility_baseline: 0.25}
+    ],
+
+    getRecommendations(condition, state, top_k=12) {
+        const items = [...this.wesadItems];
+        let result = [];
+
+        if (condition === 'baseline_r') {
+            // Pure stress-based: I1-I6 first
+            result = items.filter(i => i.category === 'wellness')
+                          .sort((a, b) => b.utility_stress - a.utility_stress);
+        } else if (condition === 'state_agnostic') {
+            // Fixed: productivity + high-sens mix
+            result = items.filter(i => i.category === 'productivity' || i.category === 'high_sens')
+                          .sort(() => Math.random() - 0.5);
+        } else {
+            // ra_mix: diverse mix
+            result = [
+                items.find(i => i.id === 'I2'),
+                items.find(i => i.id === 'I3'),
+                items.find(i => i.id === 'I7'),
+                items.find(i => i.id === 'I8'),
+                items.find(i => i.id === 'I9'),
+                items.find(i => i.id === 'I10'),
+                items.find(i => i.id === 'I1'),
+                items.find(i => i.id === 'I5')
+            ];
+        }
+
+        return result.slice(0, top_k);
+    }
+};
+
+// Override fetch
+const _originalFetch = window.fetch;
+window.fetch = function(url, options) {
+    console.log('[API Mock]', url);
+
+    // WESAD recommendations
+    if (url.includes('/api/wesad_recommendations')) {
+        const params = new URLSearchParams(url.split('?')[1]);
+        const condition = params.get('condition') || 'baseline_r';
+        const state = params.get('state') || 'stress';
+
+        const recs = APIMock.getRecommendations(condition, state);
+
+        return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({
+                recommendations: recs,
+                condition: condition,
+                state: state
+            })
+        });
+    }
+
+    // Log event
+    if (url.includes('/api/log_event') || url.includes('/api/wesad_log_event')) {
+        return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({status: 'logged', success: true})
+        });
+    }
+
+    // Session endpoints
+    if (url.includes('/session/')) {
+        return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({success: true, session_id: 'demo_' + Date.now()})
+        });
+    }
+
+    // Induction trigger
+    if (url.includes('/induction_trigger/')) {
+        const state = SessionManager.getState();
+        const condition = state.conditionOrder[state.currentSession - 1];
+
+        return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({
+                status: 'induction_triggered',
+                session_num: state.currentSession,
+                condition: condition,
+                redirect: 'content_browsing.html'
+            })
+        });
+    }
+
+    // Feedback
+    if (url.includes('/api/session_feedback')) {
+        return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({status: 'success'})
+        });
+    }
+
+    return _originalFetch.apply(this, arguments);
+};
+</script>
+
+<script>
+// Form and button navigation
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle forms
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            const consent = formData.get('consent_given');
+            const currentPage = window.location.pathname.split('/').pop();
+
+            let nextPage = '';
+
+            // Matching Flask routes exactly
+            if (currentPage === 'consent_new.html') {
+                nextPage = consent === 'yes' ? 'baseline_new.html' : 'consent_declined.html';
+            } else if (currentPage === 'baseline_new.html') {
+                nextPage = 'instructions_blind.html';
+            } else if (currentPage === 'post_survey.html') {
+                nextPage = 'debrief.html';
+            } else {
+                nextPage = 'index.html';
+            }
+
+            console.log('[NAV] Form:', currentPage, '->', nextPage);
+            window.location.href = nextPage;
+        });
+    });
+
+    // Handle goToNext in content_browsing
+    if (typeof goToNext === 'function') {
+        const originalGoToNext = goToNext;
+        window.goToNext = function() {
+            const nextPage = SessionManager.nextSession();
+            console.log('[NAV] goToNext ->', nextPage);
+            window.location.href = nextPage;
+        };
+    }
+});
+</script>
+</body>
+</html>

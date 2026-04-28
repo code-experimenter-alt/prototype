@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Session Verification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .session-box {
+            border: 2px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .session-1 { background: #ffebee; }
+        .session-2 { background: #fff3e0; }
+        .session-3 { background: #e8f5e9; }
+        .expected {
+            color: #2e7d32;
+            font-weight: bold;
+        }
+        .actual {
+            color: #1565c0;
+            font-weight: bold;
+        }
+        .match { color: #2e7d32; }
+        .mismatch { color: #c62828; font-size: 24px; }
+        button {
+            padding: 15px 30px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div style="background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 20px; text-align: center; font-size: 14px; position: sticky; top: 0; z-index: 10000; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+    <strong>Demo Mode</strong> - Static demonstration of New Study flow. Data not saved.
+    <a href="https://github.com/yourusername/music_privacy_prototype" target="_blank" style="color: #ffd700; margin-left: 15px; text-decoration: underline;">View Source</a>
+</div>
+
+    <h1>Session Verification Page</h1>
+    <p>Click each button to verify the session conditions:</p>
+
+    <div style="margin: 30px 0;">
+        <button onclick="window.open('/test_attention/1', '_blank')">Open Session 1</button>
+        <button onclick="window.open('/test_attention/2', '_blank')">Open Session 2</button>
+        <button onclick="window.open('/test_attention/3', '_blank')">Open Session 3</button>
+    </div>
+
+    <h2>Expected Results:</h2>
+
+    <div class="session-box session-1">
+        <h3>Session 1</h3>
+        <p><span class="expected">Expected Condition:</span> baseline_r</p>
+        <p><span class="expected">Expected Recommendations:</span> I1, I2, I3, I4, I5, I6 (Stress content)</p>
+        <p>Induction: Visual (red flash)</p>
+    </div>
+
+    <div class="session-box session-2">
+        <h3>Session 2</h3>
+        <p><span class="expected">Expected Condition:</span> ra_mix</p>
+        <p><span class="expected">Expected Recommendations:</span> I8, I5, I3, I1, I9, I2 (Mixed)</p>
+        <p>Induction: Auditory (alarm sound)</p>
+    </div>
+
+    <div class="session-box session-3">
+        <h3>Session 3</h3>
+        <p><span class="expected">Expected Condition:</span> state_agnostic</p>
+        <p><span class="expected">Expected Recommendations:</span> I8, I9, I5, I10, I3, I6 (Always same)</p>
+        <p>Induction: Cognitive (ranking)</p>
+    </div>
+
+    <div style="background: #fff3cd; padding: 20px; border-radius: 10px; margin-top: 30px;">
+        <h3>How to Verify:</h3>
+        <ol>
+            <li>Click "Open Session 1" button above</li>
+            <li>Complete the attention test (click through)</li>
+            <li>On the recommendation page, check the green debug box</li>
+            <li>Verify Condition shows "baseline_r" and Recommendations start with I1, I2, I3</li>
+            <li>Repeat for Session 2 and Session 3</li>
+        </ol>
+        <p><strong>Note:</strong> Each session should show DIFFERENT recommendations!</p>
+    </div>
+
+    <div style="margin-top: 30px; text-align: center;">
+        <button onclick="clearCache()" style="background: #dc3545; color: white;">Clear Browser Cache</button>
+    </div>
+
+    <script>
+        function clearCache() {
+            if ('caches' in window) {
+                caches.keys().then(names => {
+                    names.forEach(name => caches.delete(name));
+                });
+            }
+            location.reload(true);
+            alert('Cache cleared! Please reload the page.');
+        }
+    </script>
+
+<script>
+/**
+ * SessionManager - Manages New Study flow state
+ * Matches Flask session behavior
+ */
+const SessionManager = {
+    init() {
+        let state = this.getState();
+        if (!state || !state.started) {
+            state = this.createNewFlow();
+        }
+        this.applyToPage(state);
+    },
+
+    getState() {
+        try {
+            return JSON.parse(localStorage.getItem('newStudyFlow'));
+        } catch {
+            return null;
+        }
+    },
+
+    saveState(state) {
+        localStorage.setItem('newStudyFlow', JSON.stringify(state));
+    },
+
+    createNewFlow() {
+        // Randomize condition order (matching Flask)
+        const conditions = ['baseline_r', 'ra_mix', 'state_agnostic'];
+        // For demo: use fixed order
+        const state = {
+            started: true,
+            participantId: 'P' + Math.random().toString(36).substr(2, 6).toUpperCase(),
+            currentSession: 1,
+            conditionOrder: conditions,
+            inductionMethods: ['visual', 'auditory', 'cognitive'],
+            startTime: new Date().toISOString()
+        };
+        this.saveState(state);
+        return state;
+    },
+
+    applyToPage(state) {
+        // Update session display
+        document.querySelectorAll('[data-session-display]').forEach(el => {
+            el.textContent = `Session ${state.currentSession} of 3`;
+        });
+
+        // Update condition
+        const condition = state.conditionOrder[state.currentSession - 1];
+        document.querySelectorAll('[data-condition-display]').forEach(el => {
+            el.textContent = condition === 'baseline_r' ? 'Baseline-R (No Privacy)' :
+                             condition === 'ra_mix' ? 'RA+Mix (Privacy-Preserving)' :
+                             'State-Agnostic (Maximum Privacy)';
+        });
+
+        // Update step dots
+        document.querySelectorAll('.step-dot').forEach((dot, idx) => {
+            dot.classList.remove('completed', 'active');
+            if (idx + 1 < state.currentSession) dot.classList.add('completed');
+            else if (idx + 1 === state.currentSession) dot.classList.add('active');
+        });
+
+        // Update SESSION_NUM and CONDITION JS variables if they exist
+        if (typeof SESSION_NUM !== 'undefined') {
+            window.SESSION_NUM = state.currentSession;
+        }
+        if (typeof CONDITION !== 'undefined') {
+            window.CONDITION = condition;
+        }
+    },
+
+    nextSession() {
+        const state = this.getState();
+        if (state.currentSession >= 3) {
+            return 'post_survey.html';
+        } else {
+            state.currentSession++;
+            this.saveState(state);
+            return 'attention_test.html';
+        }
+    },
+
+    reset() {
+        localStorage.removeItem('newStudyFlow');
+    }
+};
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+    SessionManager.init();
+});
+
+// Expose for debugging
+window.SessionManager = SessionManager;
+</script>
+
+<script>
+/**
+ * API Mock - Simulates Flask backend
+ */
+const APIMock = {
+    // WESAD catalog items (12 items from paper)
+    wesadItems: [
+        {id: 'I1', name: 'Deep Breathing Exercise', category: 'wellness', sensitivity: 0.9, utility_stress: 0.95, utility_baseline: 0.3},
+        {id: 'I2', name: 'Progressive Muscle Relaxation', category: 'wellness', sensitivity: 0.85, utility_stress: 0.90, utility_baseline: 0.35},
+        {id: 'I3', name: 'Mindfulness Meditation', category: 'wellness', sensitivity: 0.8, utility_stress: 0.88, utility_baseline: 0.4},
+        {id: 'I4', name: 'Calm Music Playlist', category: 'wellness', sensitivity: 0.75, utility_stress: 0.85, utility_baseline: 0.45},
+        {id: 'I5', name: 'Guided Visualization', category: 'wellness', sensitivity: 0.7, utility_stress: 0.82, utility_baseline: 0.5},
+        {id: 'I6', name: 'Gentle Stretching', category: 'wellness', sensitivity: 0.65, utility_stress: 0.78, utility_baseline: 0.55},
+        {id: 'I7', name: 'Task Manager Tool', category: 'productivity', sensitivity: 0.3, utility_stress: 0.4, utility_baseline: 0.9},
+        {id: 'I8', name: 'Email Template Library', category: 'productivity', sensitivity: 0.25, utility_stress: 0.35, utility_baseline: 0.88},
+        {id: 'I9', name: 'Meeting Scheduler', category: 'productivity', sensitivity: 0.2, utility_stress: 0.3, utility_baseline: 0.85},
+        {id: 'I10', name: 'Social Media Feed', category: 'social', sensitivity: 0.4, utility_stress: 0.5, utility_baseline: 0.8},
+        {id: 'I11', name: 'Stress Tracking Dashboard', category: 'high_sens', sensitivity: 1.0, utility_stress: 0.95, utility_baseline: 0.2},
+        {id: 'I12', name: 'Mood Journal', category: 'high_sens', sensitivity: 0.95, utility_stress: 0.92, utility_baseline: 0.25}
+    ],
+
+    getRecommendations(condition, state, top_k=12) {
+        const items = [...this.wesadItems];
+        let result = [];
+
+        if (condition === 'baseline_r') {
+            // Pure stress-based: I1-I6 first
+            result = items.filter(i => i.category === 'wellness')
+                          .sort((a, b) => b.utility_stress - a.utility_stress);
+        } else if (condition === 'state_agnostic') {
+            // Fixed: productivity + high-sens mix
+            result = items.filter(i => i.category === 'productivity' || i.category === 'high_sens')
+                          .sort(() => Math.random() - 0.5);
+        } else {
+            // ra_mix: diverse mix
+            result = [
+                items.find(i => i.id === 'I2'),
+                items.find(i => i.id === 'I3'),
+                items.find(i => i.id === 'I7'),
+                items.find(i => i.id === 'I8'),
+                items.find(i => i.id === 'I9'),
+                items.find(i => i.id === 'I10'),
+                items.find(i => i.id === 'I1'),
+                items.find(i => i.id === 'I5')
+            ];
+        }
+
+        return result.slice(0, top_k);
+    }
+};
+
+// Override fetch
+const _originalFetch = window.fetch;
+window.fetch = function(url, options) {
+    console.log('[API Mock]', url);
+
+    // WESAD recommendations
+    if (url.includes('/api/wesad_recommendations')) {
+        const params = new URLSearchParams(url.split('?')[1]);
+        const condition = params.get('condition') || 'baseline_r';
+        const state = params.get('state') || 'stress';
+
+        const recs = APIMock.getRecommendations(condition, state);
+
+        return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({
+                recommendations: recs,
+                condition: condition,
+                state: state
+            })
+        });
+    }
+
+    // Log event
+    if (url.includes('/api/log_event') || url.includes('/api/wesad_log_event')) {
+        return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({status: 'logged', success: true})
+        });
+    }
+
+    // Session endpoints
+    if (url.includes('/session/')) {
+        return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({success: true, session_id: 'demo_' + Date.now()})
+        });
+    }
+
+    // Induction trigger
+    if (url.includes('/induction_trigger/')) {
+        const state = SessionManager.getState();
+        const condition = state.conditionOrder[state.currentSession - 1];
+
+        return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({
+                status: 'induction_triggered',
+                session_num: state.currentSession,
+                condition: condition,
+                redirect: 'content_browsing.html'
+            })
+        });
+    }
+
+    // Feedback
+    if (url.includes('/api/session_feedback')) {
+        return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({status: 'success'})
+        });
+    }
+
+    return _originalFetch.apply(this, arguments);
+};
+</script>
+
+<script>
+// Form and button navigation
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle forms
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            const consent = formData.get('consent_given');
+            const currentPage = window.location.pathname.split('/').pop();
+
+            let nextPage = '';
+
+            // Matching Flask routes exactly
+            if (currentPage === 'consent_new.html') {
+                nextPage = consent === 'yes' ? 'baseline_new.html' : 'consent_declined.html';
+            } else if (currentPage === 'baseline_new.html') {
+                nextPage = 'instructions_blind.html';
+            } else if (currentPage === 'post_survey.html') {
+                nextPage = 'debrief.html';
+            } else {
+                nextPage = 'index.html';
+            }
+
+            console.log('[NAV] Form:', currentPage, '->', nextPage);
+            window.location.href = nextPage;
+        });
+    });
+
+    // Handle goToNext in content_browsing
+    if (typeof goToNext === 'function') {
+        const originalGoToNext = goToNext;
+        window.goToNext = function() {
+            const nextPage = SessionManager.nextSession();
+            console.log('[NAV] goToNext ->', nextPage);
+            window.location.href = nextPage;
+        };
+    }
+});
+</script>
+</body>
+</html>

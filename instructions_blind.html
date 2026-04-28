@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="-1">
+    <title></title>
+    <link rel="stylesheet" href="static/css/style.css">
+    
+</head>
+<body>
+
+<div style="background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 20px; text-align: center; font-size: 14px; position: sticky; top: 0; z-index: 10000; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+    <strong>Demo Mode</strong> - Static demonstration of New Study flow. Data not saved.
+    <a href="https://github.com/yourusername/music_privacy_prototype" target="_blank" style="color: #ffd700; margin-left: 15px; text-decoration: underline;">View Source</button>
+</div>
+
+    <div class="container">
+        
+<style>
+.instructions-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.instruction-section {
+    background: #f8f9fa;
+    border-radius: 15px;
+    padding: 30px;
+    margin-bottom: 30px;
+}
+
+.instruction-section h2 {
+    color: #28a745;
+    margin-top: 0;
+}
+
+.flow-diagram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 30px 0;
+}
+
+.flow-step {
+    background: white;
+    border: 2px solid #28a745;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    min-width: 120px;
+}
+
+.flow-step .icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.flow-step .label {
+    font-size: 14px;
+    color: #666;
+}
+
+.flow-arrow {
+    font-size: 24px;
+    color: #28a745;
+}
+
+.info-box {
+    background: #e3f2fd;
+    border-left: 4px solid #2196f3;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 5px;
+}
+
+.tips-list {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.tips-list li {
+    margin-bottom: 15px;
+}
+
+.checklist {
+    background: white;
+    border: 2px solid #dee2e6;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.checklist-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.checklist-item:last-child {
+    border-bottom: none;
+}
+
+.checklist-item input[type="checkbox"] {
+    margin-right: 15px;
+    width: 20px;
+    height: 20px;
+}
+</style>
+
+<div class="instructions-container">
+    <h1>Study Instructions</h1>
+
+    <div class="instruction-section">
+        <h2>📋 What You Will Do</h2>
+        <p>This study consists of <strong>3 sessions</strong>. Each session follows the same pattern:</p>
+
+        <div class="flow-diagram">
+            <div class="flow-step">
+                <div class="icon">🎯</div>
+                <div class="label">Attention Task<br>(45 sec)</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+                <div class="icon">📊</div>
+                <div class="label">Heart Rate<br>Monitoring</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+                <div class="icon">🎵</div>
+                <div class="label">Browse<br>Content</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+                <div class="icon">📝</div>
+                <div class="label">Quick<br>Survey</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="instruction-section">
+        <h2>⚠️ Important Information</h2>
+
+        <div class="info-box">
+            <strong>Attention Task:</strong> You will complete a brief attention test where numbers appear on screen.
+            Press the spacebar (or click the button) when you see the number <strong>7</strong>.
+            <br><br>
+            <em>Note: During the task, system alerts may appear. Please respond naturally to any alerts that occur.</em>
+        </div>
+
+        <div class="tips-list">
+            <h3>Please ensure:</h3>
+            <ul>
+                <li>✅ You are in a quiet environment with minimal distractions</li>
+                <li>✅ You can wear headphones or have speakers available</li>
+                <li>✅ You will remain seated during the entire session</li>
+                <li>✅ Your heart rate device is connected (if using real device)</li>
+                <li>✅ You complete all 3 sessions in one sitting</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="instruction-section">
+        <h2>📱 Content Browsing</h2>
+        <p>During the heart rate monitoring phase, you will browse personalized content recommendations including:</p>
+        <ul>
+            <li>Music tracks</li>
+            <li>Mindfulness exercises</li>
+            <li>Productivity tools</li>
+            <li>Wellness content</li>
+        </ul>
+        <p><em>You can click on items that interest you. The system will personalize recommendations based on your preferences.</em></p>
+    </div>
+
+    <div class="checklist">
+        <h3>Pre-Session Checklist</h3>
+        <label class="checklist-item">
+            <input type="checkbox" id="check1">
+            <span>I understand I will complete 3 sessions with attention tasks and content browsing</span>
+        </label>
+        <label class="checklist-item">
+            <input type="checkbox" id="check2">
+            <span>I understand system alerts may appear during the attention task</span>
+        </label>
+        <label class="checklist-item">
+            <input type="checkbox" id="check3">
+            <span>I am ready to start and will complete all 3 sessions</span>
+        </label>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px;">
+        <button class="btn btn-primary btn-large" id="startBtn" onclick="startSession()" disabled>
+            I understand - Start Session 1
+        </button>
+    </div>
+</div>
+
+<script>
+// Enable start button only when all checkboxes are checked
+document.querySelectorAll('.checklist input').forEach(checkbox => {
+    checkbox.addEventListener('change', () => {
+        const allChecked = Array.from(document.querySelectorAll('.checklist input'))
+            .every(cb => cb.checked);
+        const btn = document.getElementById('startBtn');
+        btn.disabled = !allChecked;
+        btn.style.opacity = allChecked ? '1' : '0.5';
+    });
+});
+
+// Disable start button initially
+document.getElementById('startBtn').style.opacity = '0.5';
+
+function startSession() {
+    // Reset and initialize session
+    SessionManager.reset();
+    SessionManager.init();
+    console.log('[Start] Session initialized:', SessionManager.getState());
+    window.location.href = 'attention_test.html';
+}
+</script>
+
+    </div>
+    
+
+<script>
+/**
+ * SessionManager - Manages New Study flow state
+ * Matches Flask session behavior
+ */
+const SessionManager = {
+    init() {
+        let state = this.getState();
+        if (!state || !state.started) {
+            state = this.createNewFlow();
+        }
+        this.applyToPage(state);
+    },
+
+    getState() {
+        try {
+            return JSON.parse(localStorage.getItem('newStudyFlow'));
+        } catch {
+            return null;
+        }
+    },
+
+    saveState(state) {
+        localStorage.setItem('newStudyFlow', JSON.stringify(state));
+    },
+
+    createNewFlow() {
+        // Randomize condition order (matching Flask)
+        const conditions = ['baseline_r', 'ra_mix', 'state_agnostic'];
+        // For demo: use fixed order
+        const state = {
+            started: true,
+            participantId: 'P' + Math.random().toString(36).substr(2, 6).toUpperCase(),
+            currentSession: 1,
+            conditionOrder: conditions,
+            inductionMethods: ['visual', 'auditory', 'cognitive'],
+            startTime: new Date().toISOString()
+        };
+        this.saveState(state);
+        return state;
+    },
+
+    applyToPage(state) {
+        // Update session display
+        document.querySelectorAll('[data-session-display]').forEach(el => {
+            el.textContent = `Session ${state.currentSession} of 3`;
+        });
+
+        // Update condition
+        const condition = state.conditionOrder[state.currentSession - 1];
+        document.querySelectorAll('[data-condition-display]').forEach(el => {
+            el.textContent = condition === 'baseline_r' ? 'Baseline-R (No Privacy)' :
+                             condition === 'ra_mix' ? 'RA+Mix (Privacy-Preserving)' :
+                             'State-Agnostic (Maximum Privacy)';
+        });
+
+        // Update step dots
+        document.querySelectorAll('.step-dot').forEach((dot, idx) => {
+            dot.classList.remove('completed', 'active');
+            if (idx + 1 < state.currentSession) dot.classList.add('completed');
+            else if (idx + 1 === state.currentSession) dot.classList.add('active');
+        });
+
+        // Update SESSION_NUM and CONDITION JS variables if they exist
+        if (typeof SESSION_NUM !== 'undefined') {
+            window.SESSION_NUM = state.currentSession;
+        }
+        if (typeof CONDITION !== 'undefined') {
+            window.CONDITION = condition;
+        }
+    },
+
+    nextSession() {
+        const state = this.getState();
+        if (state.currentSession >= 3) {
+            return 'post_survey.html';
+        } else {
+            state.currentSession++;
+            this.saveState(state);
+            return 'attention_test.html';
+        }
+    },
+
+    reset() {
+        localStorage.removeItem('newStudyFlow');
+    }
+};
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+    SessionManager.init();
+});
+
+// Expose for debugging
+window.SessionManager = SessionManager;
+</script>
+
+<script>
+/**
+ * API Mock - Simulates Flask backend
+ */
+const APIMock = {
+    // WESAD catalog items (12 items from paper)
+    wesadItems: [
+        {id: 'I1', name: 'Deep Breathing Exercise', category: 'wellness', sensitivity: 0.9, utility_stress: 0.95, utility_baseline: 0.3},
+        {id: 'I2', name: 'Progressive Muscle Relaxation', category: 'wellness', sensitivity: 0.85, utility_stress: 0.90, utility_baseline: 0.35},
+        {id: 'I3', name: 'Mindfulness Meditation', category: 'wellness', sensitivity: 0.8, utility_stress: 0.88, utility_baseline: 0.4},
+        {id: 'I4', name: 'Calm Music Playlist', category: 'wellness', sensitivity: 0.75, utility_stress: 0.85, utility_baseline: 0.45},
+        {id: 'I5', name: 'Guided Visualization', category: 'wellness', sensitivity: 0.7, utility_stress: 0.82, utility_baseline: 0.5},
+        {id: 'I6', name: 'Gentle Stretching', category: 'wellness', sensitivity: 0.65, utility_stress: 0.78, utility_baseline: 0.55},
+        {id: 'I7', name: 'Task Manager Tool', category: 'productivity', sensitivity: 0.3, utility_stress: 0.4, utility_baseline: 0.9},
+        {id: 'I8', name: 'Email Template Library', category: 'productivity', sensitivity: 0.25, utility_stress: 0.35, utility_baseline: 0.88},
+        {id: 'I9', name: 'Meeting Scheduler', category: 'productivity', sensitivity: 0.2, utility_stress: 0.3, utility_baseline: 0.85},
+        {id: 'I10', name: 'Social Media Feed', category: 'social', sensitivity: 0.4, utility_stress: 0.5, utility_baseline: 0.8},
+        {id: 'I11', name: 'Stress Tracking Dashboard', category: 'high_sens', sensitivity: 1.0, utility_stress: 0.95, utility_baseline: 0.2},
+        {id: 'I12', name: 'Mood Journal', category: 'high_sens', sensitivity: 0.95, utility_stress: 0.92, utility_baseline: 0.25}
+    ],
+
+    getRecommendations(condition, state, top_k=12) {
+        const items = [...this.wesadItems];
+        let result = [];
+
+        if (condition === 'baseline_r') {
+            // Pure stress-based: I1-I6 first
+            result = items.filter(i => i.category === 'wellness')
+                          .sort((a, b) => b.utility_stress - a.utility_stress);
+        } else if (condition === 'state_agnostic') {
+            // Fixed: productivity + high-sens mix
+            result = items.filter(i => i.category === 'productivity' || i.category === 'high_sens')
+                          .sort(() => Math.random() - 0.5);
+        } else {
+            // ra_mix: diverse mix
+            result = [
+                items.find(i => i.id === 'I2'),
+                items.find(i => i.id === 'I3'),
+                items.find(i => i.id === 'I7'),
+                items.find(i => i.id === 'I8'),
+                items.find(i => i.id === 'I9'),
+                items.find(i => i.id === 'I10'),
+                items.find(i => i.id === 'I1'),
+                items.find(i => i.id === 'I5')
+            ];
+        }
+
+        return result.slice(0, top_k);
+    }
+};
+
+// Override fetch
+const _originalFetch = window.fetch;
+window.fetch = function(url, options) {
+    console.log('[API Mock]', url);
+
+    // WESAD recommendations
+    if (url.includes('/api/wesad_recommendations')) {
+        const params = new URLSearchParams(url.split('?')[1]);
+        const condition = params.get('condition') || 'baseline_r';
+        const state = params.get('state') || 'stress';
+
+        const recs = APIMock.getRecommendations(condition, state);
+
+        return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({
+                recommendations: recs,
+                condition: condition,
+                state: state
+            })
+        });
+    }
+
+    // Log event
+    if (url.includes('/api/log_event') || url.includes('/api/wesad_log_event')) {
+        return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({status: 'logged', success: true})
+        });
+    }
+
+    // Session endpoints
+    if (url.includes('/session/')) {
+        return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({success: true, session_id: 'demo_' + Date.now()})
+        });
+    }
+
+    // Induction trigger
+    if (url.includes('/induction_trigger/')) {
+        const state = SessionManager.getState();
+        const condition = state.conditionOrder[state.currentSession - 1];
+
+        return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({
+                status: 'induction_triggered',
+                session_num: state.currentSession,
+                condition: condition,
+                redirect: 'content_browsing.html'
+            })
+        });
+    }
+
+    // Feedback
+    if (url.includes('/api/session_feedback')) {
+        return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({status: 'success'})
+        });
+    }
+
+    return _originalFetch.apply(this, arguments);
+};
+</script>
+
+<script>
+// Form and button navigation
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle forms
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            const consent = formData.get('consent_given');
+            const currentPage = window.location.pathname.split('/').pop();
+
+            let nextPage = '';
+
+            // Matching Flask routes exactly
+            if (currentPage === 'consent_new.html') {
+                nextPage = consent === 'yes' ? 'baseline_new.html' : 'consent_declined.html';
+            } else if (currentPage === 'baseline_new.html') {
+                nextPage = 'instructions_blind.html';
+            } else if (currentPage === 'post_survey.html') {
+                nextPage = 'debrief.html';
+            } else {
+                nextPage = 'index.html';
+            }
+
+            console.log('[NAV] Form:', currentPage, '->', nextPage);
+            window.location.href = nextPage;
+        });
+    });
+
+    // Handle goToNext in content_browsing
+    if (typeof goToNext === 'function') {
+        const originalGoToNext = goToNext;
+        window.goToNext = function() {
+            const nextPage = SessionManager.nextSession();
+            console.log('[NAV] goToNext ->', nextPage);
+            window.location.href = nextPage;
+        };
+    }
+});
+</script>
+</body>
+</html>

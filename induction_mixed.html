@@ -1,0 +1,269 @@
+<div class="induction-task mixed-task">
+    <h1>🎯 Quick Math Challenge</h1>
+
+    <div class="task-instructions">
+        <p><strong>Instructions:</strong></p>
+        <ul>
+            <li>Solve math problems as quickly as you can</li>
+            <li>Type the answer and press Enter</li>
+            <li>Correct answers earn points</li>
+            <li>Wrong answers lose 5 seconds</li>
+            <li>Task lasts 1 minute</li>
+        </ul>
+    </div>
+
+    <div class="timer-container">
+        <div class="timer" id="math-timer">1:00</div>
+    </div>
+
+    <div class="game-area">
+        <div class="problem-display" id="math-problem">Ready?</div>
+        <input type="number" class="answer-input" id="math-input" placeholder="?" disabled>
+        <div class="game-status" id="math-status">Press START to begin</div>
+    </div>
+
+    <div class="stats">
+        <div>Score: <span id="math-score">0</span></div>
+        <div>Streak: <span id="math-streak">0</span></div>
+    </div>
+
+    <button class="start-btn" id="math-start" onclick="startMathGame()">START GAME</button>
+
+    <style>
+        .induction-task {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 40px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .induction-task h1 {
+            color: #e67e22;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        .task-instructions {
+            background: #fef5e7;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border-left: 4px solid #e67e22;
+        }
+
+        .timer-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .timer {
+            font-size: 48px;
+            font-weight: bold;
+            color: #e67e22;
+            font-family: monospace;
+        }
+
+        .game-area {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .problem-display {
+            font-size: 48px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+            min-height: 60px;
+        }
+
+        .answer-input {
+            font-size: 32px;
+            width: 150px;
+            padding: 10px;
+            text-align: center;
+            border: 3px solid #ddd;
+            border-radius: 12px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .answer-input:focus {
+            border-color: #e67e22;
+        }
+
+        .answer-input.correct {
+            border-color: #27ae60;
+            background: #d5f4e6;
+        }
+
+        .answer-input.wrong {
+            border-color: #e74c3c;
+            background: #fadbd8;
+        }
+
+        .game-status {
+            font-size: 18px;
+            font-weight: 600;
+            color: #666;
+            margin: 20px 0;
+            min-height: 25px;
+        }
+
+        .start-btn {
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            margin: 20px auto 0;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .start-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(230, 126, 34, 0.4);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 20px;
+            font-size: 18px;
+            color: #666;
+        }
+
+        .stats span {
+            font-weight: bold;
+            color: #e67e22;
+        }
+    </style>
+
+    <script>
+        // Game state
+        let mathScore = 0;
+        let mathStreak = 0;
+        let mathAnswer = 0;
+        let mathGameActive = false;
+        let mathTimeLeft = 60;
+        let mathTimer = null;
+
+        function generateMathProblem() {
+            const operators = ['+', '-', '*'];
+            const operator = operators[Math.floor(Math.random() * operators.length)];
+            let num1, num2;
+
+            switch(operator) {
+                case '+':
+                    num1 = Math.floor(Math.random() * 50) + 10;
+                    num2 = Math.floor(Math.random() * 50) + 10;
+                    mathAnswer = num1 + num2;
+                    break;
+                case '-':
+                    num1 = Math.floor(Math.random() * 50) + 20;
+                    num2 = Math.floor(Math.random() * num1);
+                    mathAnswer = num1 - num2;
+                    break;
+                case '*':
+                    num1 = Math.floor(Math.random() * 12) + 2;
+                    num2 = Math.floor(Math.random() * 12) + 2;
+                    mathAnswer = num1 * num2;
+                    break;
+            }
+
+            document.getElementById('math-problem').textContent = `${num1} ${operator} ${num2} = ?`;
+        }
+
+        function checkMathAnswer() {
+            const input = document.getElementById('math-input');
+            const userAnswer = parseInt(input.value);
+
+            if (userAnswer === mathAnswer) {
+                mathScore += 10 + (mathStreak * 2);
+                mathStreak++;
+                document.getElementById('math-score').textContent = mathScore;
+                document.getElementById('math-streak').textContent = mathStreak;
+
+                input.classList.add('correct');
+                document.getElementById('math-status').textContent = 'Correct! +' + (10 + (mathStreak * 2)) + ' points';
+
+                setTimeout(() => {
+                    input.classList.remove('correct');
+                    input.value = '';
+                    generateMathProblem();
+                    document.getElementById('math-status').textContent = '';
+                }, 500);
+            } else {
+                mathStreak = 0;
+                document.getElementById('math-streak').textContent = mathStreak;
+                mathTimeLeft = Math.max(0, mathTimeLeft - 5);
+
+                input.classList.add('wrong');
+                document.getElementById('math-status').textContent = 'Wrong! -5 seconds';
+
+                setTimeout(() => {
+                    input.classList.remove('wrong');
+                    input.value = '';
+                }, 500);
+            }
+        }
+
+        function startMathGame() {
+            if (mathGameActive) return;
+
+            mathScore = 0;
+            mathStreak = 0;
+            mathTimeLeft = 60;
+            mathGameActive = true;
+
+            document.getElementById('math-score').textContent = mathScore;
+            document.getElementById('math-streak').textContent = mathStreak;
+            document.getElementById('math-start').style.display = 'none';
+
+            const input = document.getElementById('math-input');
+            input.disabled = false;
+            input.focus();
+
+            generateMathProblem();
+            document.getElementById('math-status').textContent = 'Solve as many as you can!';
+
+            mathTimer = setInterval(() => {
+                mathTimeLeft--;
+                const mins = Math.floor(mathTimeLeft / 60);
+                const secs = mathTimeLeft % 60;
+                document.getElementById('math-timer').textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+
+                if (mathTimeLeft <= 0) {
+                    clearInterval(mathTimer);
+                    endMathGame();
+                }
+            }, 1000);
+        }
+
+        function endMathGame() {
+            mathGameActive = false;
+            const input = document.getElementById('math-input');
+            input.disabled = true;
+            document.getElementById('math-problem').textContent = `Final Score: ${mathScore}`;
+            document.getElementById('math-status').textContent = 'Great job! Moving to music recommendations...';
+            document.getElementById('math-start').style.display = 'block';
+            document.getElementById('math-start').textContent = 'RESTART';
+        }
+
+        // Bind enter key
+        document.getElementById('math-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && mathGameActive) {
+                checkMathAnswer();
+            }
+        });
+    </script>
+</div>

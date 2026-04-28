@@ -1,0 +1,248 @@
+<div class="induction-task neutral-task">
+    <h1>🎨 Pattern Memory</h1>
+
+    <div class="task-instructions">
+        <p><strong>Instructions:</strong></p>
+        <ul>
+            <li>Watch the pattern of colors light up</li>
+            <li>Remember the sequence</li>
+            <li>Click the colors in the same order</li>
+            <li>Each round adds one more color</li>
+            <li>Task lasts 1 minute</li>
+        </ul>
+    </div>
+
+    <div class="timer-container">
+        <div class="timer" id="neutral-timer">1:00</div>
+    </div>
+
+    <div class="score-display">
+        Level: <span id="neutral-level">0</span>
+    </div>
+
+    <div class="game-area">
+        <div class="pattern-grid">
+            <button class="pattern-btn" style="background: #e74c3c;" onclick="handlePatternClick(0)"></button>
+            <button class="pattern-btn" style="background: #3498db;" onclick="handlePatternClick(1)"></button>
+            <button class="pattern-btn" style="background: #2ecc71;" onclick="handlePatternClick(2)"></button>
+            <button class="pattern-btn" style="background: #f39c12;" onclick="handlePatternClick(3)"></button>
+        </div>
+        <div class="game-status" id="neutral-status">Press START to begin</div>
+    </div>
+
+    <button class="start-btn" id="neutral-start" onclick="startNeutralGame()">START GAME</button>
+
+    <style>
+        .induction-task {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 40px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .induction-task h1 {
+            color: #16a085;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        .task-instructions {
+            background: #e8f6f3;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border-left: 4px solid #16a085;
+        }
+
+        .timer-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .timer {
+            font-size: 48px;
+            font-weight: bold;
+            color: #16a085;
+            font-family: monospace;
+        }
+
+        .score-display {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 600;
+            color: #16a085;
+            margin-bottom: 20px;
+        }
+
+        .game-area {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .pattern-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            max-width: 300px;
+            margin: 0 auto 30px;
+        }
+
+        .pattern-btn {
+            width: 120px;
+            height: 120px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            opacity: 0.6;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .pattern-btn:hover {
+            opacity: 0.8;
+            transform: scale(1.02);
+        }
+
+        .pattern-btn.active {
+            opacity: 1;
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(255,255,255,0.5);
+        }
+
+        .game-status {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            min-height: 30px;
+        }
+
+        .start-btn {
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            margin: 20px auto 0;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #16a085, #1abc9c);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .start-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(22, 160, 133, 0.4);
+        }
+    </style>
+
+    <script>
+        // Game state
+        let neutralPattern = [];
+        let neutralPlayerPattern = [];
+        let neutralLevel = 0;
+        let neutralGameActive = false;
+        let neutralAcceptingInput = false;
+        let neutralTimeLeft = 60;
+        let neutralTimer = null;
+
+        function flashPatternButton(index) {
+            const buttons = document.querySelectorAll('.pattern-btn');
+            buttons[index].classList.add('active');
+            setTimeout(() => {
+                buttons[index].classList.remove('active');
+            }, 400);
+        }
+
+        function playPattern() {
+            neutralAcceptingInput = false;
+            document.getElementById('neutral-status').textContent = 'Watch the pattern...';
+
+            let i = 0;
+            const interval = setInterval(() => {
+                if (i >= neutralPattern.length) {
+                    clearInterval(interval);
+                    neutralAcceptingInput = true;
+                    document.getElementById('neutral-status').textContent = 'Your turn! Repeat the pattern';
+                    neutralPlayerPattern = [];
+                    return;
+                }
+                flashPatternButton(neutralPattern[i]);
+                i++;
+            }, 600);
+        }
+
+        function nextNeutralRound() {
+            neutralPlayerPattern = [];
+            neutralLevel++;
+            document.getElementById('neutral-level').textContent = neutralLevel;
+            neutralPattern.push(Math.floor(Math.random() * 4));
+
+            setTimeout(() => {
+                playPattern();
+            }, 800);
+        }
+
+        function handlePatternClick(index) {
+            if (!neutralGameActive || !neutralAcceptingInput) {
+                if (!neutralGameActive) startNeutralGame();
+                return;
+            }
+
+            flashPatternButton(index);
+            neutralPlayerPattern.push(index);
+
+            const currentMove = neutralPlayerPattern.length - 1;
+            if (neutralPlayerPattern[currentMove] !== neutralPattern[currentMove]) {
+                endNeutralGame();
+                return;
+            }
+
+            if (neutralPlayerPattern.length === neutralPattern.length) {
+                document.getElementById('neutral-status').textContent = 'Correct!';
+                setTimeout(nextNeutralRound, 1000);
+            }
+        }
+
+        function startNeutralGame() {
+            if (neutralGameActive) return;
+
+            neutralPattern = [];
+            neutralPlayerPattern = [];
+            neutralLevel = 0;
+            neutralTimeLeft = 60;
+            neutralGameActive = true;
+
+            document.getElementById('neutral-level').textContent = neutralLevel;
+            document.getElementById('neutral-start').style.display = 'none';
+
+            neutralTimer = setInterval(() => {
+                neutralTimeLeft--;
+                const mins = Math.floor(neutralTimeLeft / 60);
+                const secs = neutralTimeLeft % 60;
+                document.getElementById('neutral-timer').textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+
+                if (neutralTimeLeft <= 0) {
+                    clearInterval(neutralTimer);
+                    endNeutralGame();
+                }
+            }, 1000);
+
+            nextNeutralRound();
+        }
+
+        function endNeutralGame() {
+            neutralGameActive = false;
+            neutralAcceptingInput = false;
+            document.getElementById('neutral-status').textContent = `Game Over! Final Level: ${neutralLevel}`;
+            document.getElementById('neutral-start').style.display = 'block';
+            document.getElementById('neutral-start').textContent = 'RESTART';
+        }
+    </script>
+</div>

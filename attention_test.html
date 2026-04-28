@@ -1,0 +1,1581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="-1">
+    <title></title>
+    <link rel="stylesheet" href="static/css/style.css">
+    
+</head>
+<body>
+
+<div style="background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 20px; text-align: center; font-size: 14px; position: sticky; top: 0; z-index: 10000; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+    <strong>Demo Mode</strong> - Static demonstration of New Study flow. Data not saved.
+    <a href="https://github.com/yourusername/music_privacy_prototype" target="_blank" style="color: #ffd700; margin-left: 15px; text-decoration: underline;">View Source</a>
+</div>
+
+    <div class="container">
+        
+<style>
+.attention-container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.session-info {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #666;
+    font-size: 14px;
+}
+
+/* Instruction phase */
+.instruction-box {
+    background: #f8f9fa;
+    border-radius: 15px;
+    padding: 30px;
+    text-align: center;
+}
+
+.instruction-box h2 {
+    margin-top: 0;
+    color: #333;
+}
+
+.task-preview {
+    background: white;
+    border: 3px solid #007bff;
+    border-radius: 10px;
+    padding: 30px;
+    margin: 20px 0;
+    font-size: 48px;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.key-instruction {
+    background: #e3f2fd;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.key-instruction strong {
+    color: #1976d2;
+    font-size: 18px;
+}
+
+/* Test phase */
+.test-phase {
+    display: none;
+}
+
+.test-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+.test-stats {
+    display: flex;
+    gap: 20px;
+}
+
+.stat-box {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: #666;
+}
+
+/* Progress bar */
+.progress-container {
+    background: #e9ecef;
+    border-radius: 10px;
+    height: 20px;
+    margin-bottom: 30px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #28a745, #20c997);
+    width: 0%;
+    transition: width 0.1s linear;
+}
+
+/* Number display */
+.number-display {
+    background: white;
+    border: 4px solid #dee2e6;
+    border-radius: 20px;
+    padding: 60px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.target-number {
+    font-size: 120px;
+    font-weight: bold;
+    color: #333;
+    line-height: 1;
+    min-height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.target-number.stress {
+    color: #dc3545;
+}
+
+/* Response button */
+.response-btn {
+    width: 100%;
+    padding: 25px;
+    font-size: 24px;
+    font-weight: bold;
+    border: none;
+    border-radius: 15px;
+    background: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: all 0.1s;
+}
+
+.response-btn:active {
+    transform: scale(0.98);
+}
+
+.response-btn.target {
+    background: #dc3545;
+    animation: pulse 0.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+}
+
+/* Completion */
+.completion-box {
+    display: none;
+    text-align: center;
+    padding: 40px;
+    background: #f8f9fa;
+    border-radius: 15px;
+}
+
+.completion-box h2 {
+    color: #28a745;
+    margin-bottom: 20px;
+}
+
+/* ============================================
+   ALL HORROR OVERLAYS
+   ============================================ */
+
+/* Virus Warning Overlay */
+.virus-warning-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: 99998;
+    font-family: Arial, sans-serif;
+}
+
+.virus-header {
+    background: #d32f2f;
+    color: white;
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    animation: virusFlash 0.3s infinite;
+}
+
+@keyframes virusFlash {
+    0%, 100% { background: #d32f2f; }
+    50% { background: #b71c1c; }
+}
+
+.virus-warning-icon {
+    width: 50px;
+    height: 50px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #d32f2f;
+    font-size: 36px;
+    font-weight: bold;
+    animation: warningPulse 0.3s infinite;
+}
+
+@keyframes warningPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+}
+
+.virus-title {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.virus-body {
+    padding: 50px;
+    color: white;
+}
+
+.virus-alert-box {
+    background: rgba(211, 47, 47, 0.2);
+    border: 3px solid #d32f2f;
+    padding: 40px;
+    margin-bottom: 30px;
+    animation: virusBorder 0.5s infinite;
+}
+
+@keyframes virusBorder {
+    0%, 100% { border-color: #d32f2f; box-shadow: 0 0 30px #d32f2f; }
+    50% { border-color: #ff5252; box-shadow: 0 0 60px #ff5252; }
+}
+
+.virus-alert-title {
+    font-size: 48px;
+    color: #ff5252;
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.virus-count {
+    font-size: 96px;
+    color: #ff1744;
+    font-weight: bold;
+    text-align: center;
+    display: block;
+    animation: countPulse 0.2s infinite;
+}
+
+@keyframes countPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+.virus-scanning-text {
+    font-size: 24px;
+    color: #ffcdd2;
+    text-align: center;
+    margin-top: 30px;
+    font-family: monospace;
+}
+
+.virus-scanning-text div {
+    margin: 10px 0;
+    animation: scanBlink 0.5s infinite;
+}
+
+@keyframes scanBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+/* Horror Image Overlay - FULL SCREEN */
+.horror-image-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+    z-index: 99999;
+    overflow: hidden;
+}
+
+.horror-image-overlay.strobe {
+    animation: strobeEffect 0.08s infinite;
+}
+
+@keyframes strobeEffect {
+    0%, 100% { background: #000; }
+    25% { background: #300; }
+    50% { background: #000; }
+    75% { background: #500; }
+}
+
+.horror-image-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.horror-image {
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    object-position: center;
+    animation:
+        horrorZoom 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55),
+        horrorShake 0.08s infinite,
+        horrorFlicker 0.1s infinite;
+    filter: contrast(1.4) brightness(0.85) saturate(1.3);
+}
+
+@keyframes horrorZoom {
+    0% { transform: scale(0) rotate(-10deg); opacity: 0; }
+    50% { transform: scale(1.4) rotate(5deg); opacity: 1; }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes horrorShake {
+    0%, 100% { transform: translate(0, 0); }
+    25% { transform: translate(-8px, 8px); }
+    50% { transform: translate(8px, -8px); }
+    75% { transform: translate(-8px, -8px); }
+}
+
+@keyframes horrorFlicker {
+    0%, 100% { opacity: 1; filter: contrast(1.3) brightness(0.9); }
+    50% { opacity: 0.8; filter: contrast(1.5) brightness(0.7) hue-rotate(10deg); }
+}
+
+.horror-text-overlay {
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #ff0000;
+    font-size: 56px;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-shadow:
+        0 0 20px #ff0000,
+        0 0 40px #ff0000,
+        0 0 60px #ff0000,
+        3px 3px 0 #000,
+        -3px -3px 0 #000;
+    animation: textGlitch 0.2s infinite;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 10px;
+    text-align: center;
+    z-index: 10;
+}
+
+@keyframes textGlitch {
+    0%, 100% { transform: translateX(-50%) translate(0); }
+    20% { transform: translateX(-50%) translate(-3px, 2px); }
+    40% { transform: translateX(-50%) translate(3px, -2px); }
+    60% { transform: translateX(-50%) translate(-2px, -3px); }
+    80% { transform: translateX(-50%) translate(2px, 3px); }
+}
+
+/* Screen flash */
+.screen-flash {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    z-index: 99997;
+    animation: flashEffect 0.1s infinite;
+}
+
+@keyframes flashEffect {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 0.8; }
+}
+
+/* BSOD */
+.bsod-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #0078d7;
+    z-index: 99998;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: white;
+    padding: 100px;
+    box-sizing: border-box;
+}
+
+.bsod-sad {
+    font-size: 150px;
+    margin-bottom: 40px;
+    animation: bsodShake 0.1s infinite;
+}
+
+@keyframes bsodShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.bsod-title {
+    font-size: 36px;
+    margin-bottom: 30px;
+}
+
+.bsod-text {
+    font-size: 20px;
+    line-height: 1.8;
+    margin-bottom: 30px;
+}
+
+.bsod-progress {
+    width: 100%;
+    height: 40px;
+    background: rgba(255,255,255,0.2);
+    margin: 30px 0;
+}
+
+.bsod-progress-bar {
+    height: 100%;
+    background: white;
+    width: 0%;
+    animation: bsodProgress 3s linear forwards;
+}
+
+@keyframes bsodProgress {
+    to { width: 100%; }
+}
+
+.bsod-code {
+    font-family: monospace;
+    margin-top: 40px;
+    font-size: 16px;
+    opacity: 0.8;
+}
+
+/* Static overlay */
+.static-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: 99996;
+    overflow: hidden;
+}
+
+.static-noise {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(255,255,255,0.1) 2px,
+            rgba(255,255,255,0.1) 4px
+        );
+    animation: staticMove 0.05s infinite;
+}
+
+@keyframes staticMove {
+    0% { transform: translate(0, 0); }
+    25% { transform: translate(-3px, 3px); }
+    50% { transform: translate(3px, -3px); }
+    75% { transform: translate(-3px, -3px); }
+    100% { transform: translate(3px, 3px); }
+}
+
+.glitch-line {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: rgba(255,255,255,0.3);
+    animation: glitchMove 2s infinite linear;
+}
+
+@keyframes glitchMove {
+    0% { transform: translateY(0); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(100vh); opacity: 0; }
+}
+
+/* Red Screen of Death (for Session 2) */
+.rsod-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #c00000;
+    z-index: 99998;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: white;
+    padding: 100px;
+    box-sizing: border-box;
+}
+
+/* Black Screen with white text (for Session 3) */
+.blackscreen-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: 99998;
+    font-family: 'Courier New', monospace;
+    color: #0f0;
+    padding: 100px;
+    box-sizing: border-box;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.blackscreen-text {
+    animation: terminalBlink 1s infinite;
+}
+
+@keyframes terminalBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+</style>
+
+<div class="attention-container">
+
+    <!-- Audio Elements for Sound Effects -->
+    <audio id="alarmSound" src="static/sounds/error_alarm.wav" preload="auto"></audio>
+    <audio id="screamSound" src="static/sounds/scream.wav" preload="auto"></audio>
+    <audio id="staticSound" src="static/sounds/static.wav" preload="auto"></audio>
+    <audio id="glitchSound" src="static/sounds/glitch.wav" preload="auto"></audio>
+    <audio id="heartbeatSound" src="static/sounds/heartbeat.wav" preload="auto"></audio>
+    <audio id="horror1Sound" src="static/sounds/horror1_scream.wav" preload="auto"></audio>
+    <audio id="horror2Sound" src="static/sounds/horror2_growl.wav" preload="auto"></audio>
+    <audio id="horror3Sound" src="static/sounds/horror3_distorted.wav" preload="auto"></audio>
+    <audio id="horror4Sound" src="static/sounds/horror4_laugh.wav" preload="auto"></audio>
+    <audio id="horror5Sound" src="static/sounds/horror5_whisper.wav" preload="auto"></audio>
+
+    <div class="session-info" data-session-display>
+        Session 1 of 3 - Attention Task
+    </div>
+
+    <!-- Phase 1: Instructions -->
+    <div id="instructionPhase" class="instruction-box">
+        <h2>Attention Test</h2>
+        <p>A series of numbers will appear on the screen. Your task is simple:</p>
+
+        <div class="key-instruction">
+            <strong>Press SPACE or click the button when you see the number 7</strong>
+        </div>
+
+        <div class="task-preview">7</div>
+
+        <p>The test lasts about 2 minutes. Respond as quickly and accurately as possible.</p>
+
+        <button class="btn btn-primary btn-large" onclick="startTest()" style="margin-top: 20px;">
+            Start Test
+        </button>
+    </div>
+
+    <!-- Phase 2: Test -->
+    <div id="testPhase" class="test-phase">
+        <div class="test-header">
+            <div class="test-stats">
+                <div class="stat-box">
+                    <div class="stat-value" id="correctCount">0</div>
+                    <div class="stat-label">Correct</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="wrongCount">0</div>
+                    <div class="stat-label">Wrong</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="missedCount">0</div>
+                    <div class="stat-label">Missed</div>
+                </div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="timeRemaining">120</div>
+                <div class="stat-label">Seconds</div>
+            </div>
+            <div class="stat-box" id="audioIndicator" style="opacity: 0.3;">
+                <div class="stat-value">🔊</div>
+                <div class="stat-label">Audio</div>
+            </div>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <div class="number-display">
+            <div class="target-number" id="targetDisplay">-</div>
+        </div>
+
+        <button class="response-btn" id="responseBtn" onclick="recordResponse()">
+            Press when you see 7
+        </button>
+    </div>
+
+    <!-- Phase 3: Completion -->
+    <div id="completionPhase" class="completion-box">
+        <h2>Test Complete</h2>
+        <p>Thank you for completing the attention test.</p>
+        <p>Please continue to view your personalized recommendations.</p>
+        <button class="btn btn-primary btn-large" onclick="continueToNext()" style="margin-top: 20px;">
+            View Recommendations
+        </button>
+    </div>
+
+    <!-- Virus Warning Overlay -->
+    <div id="virusWarningOverlay" class="virus-warning-overlay">
+        <div class="virus-header">
+            <div class="virus-warning-icon">⚠️</div>
+            <div class="virus-title">CRITICAL SECURITY WARNING</div>
+        </div>
+        <div class="virus-body">
+            <div class="virus-alert-box">
+                <div class="virus-alert-title">MALWARE DETECTED!</div>
+                <span id="virusCount" class="virus-count">0</span>
+                <div class="virus-scanning-text" id="virusScanText">
+                    <div>Scanning system files...</div>
+                    <div>C:\Windows\System32\...</div>
+                    <div>Threats found: TROJAN.HORROR.001</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="horrorImageOverlay" class="horror-image-overlay">
+    <div class="horror-image-container">
+        <img id="horrorImage" class="horror-image" src="" alt="">
+        <div id="horrorText" class="horror-text-overlay"></div>
+    </div>
+</div>
+
+<div id="screenFlash" class="screen-flash"></div>
+
+<div id="bsodOverlay" class="bsod-overlay">
+    <div class="bsod-content">
+        <div class="bsod-sad">:(</div>
+        <div class="bsod-title">Your device ran into a problem and needs to restart.</div>
+        <div class="bsod-text">
+            We're just collecting some error info, and then we'll restart for you.<br>
+            <span id="bsodPercent">0</span>% complete
+        </div>
+        <div class="bsod-progress">
+            <div class="bsod-progress-bar"></div>
+        </div>
+        <div class="bsod-code">
+            Stop Code: CRITICAL_PROCESS_DIED<br>
+            What failed: attention_test.exe<br>
+            Error: MEMORY_MANAGEMENT
+        </div>
+    </div>
+</div>
+
+<!-- RSOD for Session 2 -->
+<div id="rsodOverlay" class="rsod-overlay">
+    <div class="bsod-content">
+        <div class="bsod-sad">X</div>
+        <div class="bsod-title">FATAL SYSTEM ERROR</div>
+        <div class="bsod-text">
+            A critical error has occurred. System integrity compromised.<br>
+            <span id="rsodPercent">0</span>% attempting recovery
+        </div>
+        <div class="bsod-progress">
+            <div class="bsod-progress-bar" style="background: #ff0000;"></div>
+        </div>
+        <div class="bsod-code">
+            Error: 0x0000007B<br>
+            Module: SYSTEM32.EXE<br>
+            Status: UNRECOVERABLE
+        </div>
+    </div>
+</div>
+
+<!-- Black screen for Session 3 -->
+<div id="blackscreenOverlay" class="blackscreen-overlay">
+    <div class="blackscreen-text">
+        > SYSTEM BREACH DETECTED<br>
+        > INITIATING EMERGENCY PROTOCOL...<br>
+        > <span id="terminalText">ACCESSING PERSONAL FILES...</span><br>
+        > <span id="terminalText2">UPLOADING DATA TO REMOTE SERVER...</span><br>
+        > <span id="terminalPercent">0</span>% COMPLETE<br>
+        > WARNING: IDENTITY THEFT IN PROGRESS
+    </div>
+</div>
+
+<div id="staticOverlay" class="static-overlay">
+    <div class="static-noise"></div>
+    <div id="glitchLines"></div>
+</div>
+
+<script>
+let SESSION_NUM = 1;
+const TEST_DURATION = 120; // 2 minutes
+const STIMULUS_INTERVAL = 1000;
+
+// Three different horror sequences for each session
+const HORROR_SEQUENCES = {
+    // Session 1: Classic horror progression
+    1: [
+        { time: 10, type: 'virus_warning', duration: 8000 },
+        { time: 22, type: 'flash_then_horror', image: 1, duration: 5000 },
+        { time: 38, type: 'static_then_horror', image: 2, duration: 5000 },
+        { time: 55, type: 'bsod_then_horror', image: 3, duration: 6000 },
+        { time: 75, type: 'flash_then_horror', image: 4, duration: 5000 },
+        { time: 95, type: 'final_horror', image: 5, duration: 8000 },
+    ],
+    // Session 2: Faster, more aggressive
+    2: [
+        { time: 8, type: 'virus_warning', duration: 6000 },
+        { time: 18, type: 'flash_then_horror', image: 2, duration: 6000 },
+        { time: 30, type: 'rsod_then_horror', image: 3, duration: 6000 },
+        { time: 45, type: 'static_then_horror', image: 1, duration: 5000 },
+        { time: 60, type: 'flash_then_horror', image: 5, duration: 6000 },
+        { time: 80, type: 'rsod_then_horror', image: 4, duration: 7000 },
+        { time: 100, type: 'final_horror', image: 3, duration: 8000 },
+    ],
+    // Session 3: Slow build to intense finale
+    3: [
+        { time: 15, type: 'virus_warning', duration: 5000 },
+        { time: 28, type: 'blackscreen', duration: 5000 },
+        { time: 42, type: 'flash_then_horror', image: 4, duration: 4000 },
+        { time: 55, type: 'static_then_horror', image: 5, duration: 5000 },
+        { time: 70, type: 'blackscreen_horror', image: 1, duration: 6000 },
+        { time: 85, type: 'bsod_then_horror', image: 2, duration: 6000 },
+        { time: 102, type: 'grand_finale', duration: 12000 },
+    ]
+};
+
+// Horror texts for each image
+const HORROR_TEXTS = {
+    1: ["BEHIND YOU", "I'M HERE", "FOUND YOU"],
+    2: ["DON'T LOOK", "TOO LATE", "RUN AWAY"],
+    3: ["I SEE YOU", "PRETTY?", "JOIN ME"],
+    4: ["AM I PRETTY?", "SHHHH", "STAY QUIET"],
+    5: ["JOIN US", "LAUGHING", "FOREVER"]
+};
+
+// Session-specific text variations
+const SESSION_TEXTS = {
+    1: ["BEHIND YOU", "DON'T LOOK", "I SEE YOU", "AM I PRETTY?", "JOIN US"],
+    2: ["FOUND YOU", "TOO LATE", "PRETTY?", "SHHHH", "LAUGHING"],
+    3: ["I'M HERE", "RUN AWAY", "JOIN ME", "STAY QUIET", "FOREVER"]
+};
+
+let testState = {
+    isRunning: false,
+    startTime: null,
+    currentNumber: null,
+    hasResponded: false,
+    correct: 0,
+    wrong: 0,
+    missed: 0,
+    stimulusStartTime: null,
+    horrorPhase: 0
+};
+
+let progressTimer, stimulusTimer, missedCheckTimer;
+
+const sounds = {
+    alarm: document.getElementById('alarmSound'),
+    scream: document.getElementById('screamSound'),
+    static: document.getElementById('staticSound'),
+    glitch: document.getElementById('glitchSound'),
+    heartbeat: document.getElementById('heartbeatSound'),
+    horror1: document.getElementById('horror1Sound'),
+    horror2: document.getElementById('horror2Sound'),
+    horror3: document.getElementById('horror3Sound'),
+    horror4: document.getElementById('horror4Sound'),
+    horror5: document.getElementById('horror5Sound')
+};
+
+// Sound combinations for each image (layered for maximum effect)
+const IMAGE_SOUND_COMBOS = {
+    1: ['horror1', 'glitch', 'static'],      // 咒怨男孩: 尖叫 + 故障 + 静电
+    2: ['horror2', 'static', 'heartbeat'],   // 诺斯费拉图: 低吼 + 静电 + 心跳
+    3: ['horror3', 'glitch', 'alarm'],       // 裂口女: 扭曲尖叫 + 故障 + 警报
+    4: ['horror4', 'scream', 'heartbeat'],   // 安娜贝尔: 笑声 + 尖叫 + 心跳
+    5: ['horror5', 'static', 'scream']       // 小丑: 低语 + 静电 + 尖叫
+};
+
+function playSound(type) {
+    const sound = sounds[type];
+    if (sound) {
+        sound.volume = 1.0;
+        sound.currentTime = 0;
+
+        // Ensure audio context is resumed
+        if (audioContext && audioContext.state === 'suspended') {
+            audioContext.resume();
+        }
+
+        // Show audio indicator
+        const indicator = document.getElementById('audioIndicator');
+        if (indicator) {
+            indicator.style.opacity = '1';
+            indicator.style.transform = 'scale(1.2)';
+            setTimeout(() => {
+                indicator.style.opacity = '0.3';
+                indicator.style.transform = 'scale(1)';
+            }, 500);
+        }
+
+        const playPromise = sound.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(err => {
+                console.warn('Audio play failed:', type, err.message);
+                // Try unlocking again on failure
+                if (!audioUnlocked) {
+                    unlockAudio();
+                }
+            });
+        }
+    } else {
+        console.warn('Sound not found:', type);
+    }
+}
+
+function stopAllSounds() {
+    Object.values(sounds).forEach(s => {
+        if (s) { s.pause(); s.currentTime = 0; }
+    });
+}
+
+let audioContext = null;
+let audioUnlocked = false;
+
+function unlockAudio() {
+    if (audioUnlocked) return;
+
+    // Create audio context if needed
+    if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    }
+
+    // Resume audio context (required for newer browsers)
+    if (audioContext.state === 'suspended') {
+        audioContext.resume();
+    }
+
+    // Unlock all audio elements by playing and pausing
+    const unlockPromises = Object.values(sounds).map(sound => {
+        if (!sound) return Promise.resolve();
+
+        sound.muted = true;
+        const playPromise = sound.play();
+        if (playPromise !== undefined) {
+            return playPromise
+                .then(() => {
+                    sound.pause();
+                    sound.currentTime = 0;
+                    sound.muted = false;
+                    console.log('Audio unlocked:', sound.id);
+                })
+                .catch(err => {
+                    console.log('Audio unlock failed for:', sound.id, err.message);
+                });
+        }
+        return Promise.resolve();
+    });
+
+    Promise.all(unlockPromises).then(() => {
+        audioUnlocked = true;
+        console.log('All audio elements unlocked');
+    });
+}
+
+function startTest() {
+    // Unlock audio context for browser autoplay policy
+    unlockAudio();
+
+    document.getElementById('instructionPhase').style.display = 'none';
+    document.getElementById('testPhase').style.display = 'block';
+
+    testState.isRunning = true;
+    testState.startTime = Date.now();
+
+    progressTimer = setInterval(updateProgress, 100);
+
+    setTimeout(function() {
+        stimulusTimer = setInterval(showStimulus, STIMULUS_INTERVAL);
+        showStimulus();
+    }, 1000);
+
+    missedCheckTimer = setInterval(checkMissed, 100);
+}
+
+function updateProgress() {
+    const elapsed = (Date.now() - testState.startTime) / 1000;
+    const progress = Math.min(100, (elapsed / TEST_DURATION) * 100);
+    document.getElementById('progressBar').style.width = progress + '%';
+    document.getElementById('timeRemaining').textContent = Math.max(0, Math.ceil(TEST_DURATION - elapsed));
+
+    const sequence = HORROR_SEQUENCES[SESSION_NUM] || HORROR_SEQUENCES[1];
+
+    for (let i = testState.horrorPhase; i < sequence.length; i++) {
+        const event = sequence[i];
+        if (elapsed >= event.time && !event.triggered) {
+            event.triggered = true;
+            testState.horrorPhase = i + 1;
+            triggerHorrorEvent(event);
+        }
+    }
+
+    if (elapsed >= TEST_DURATION) {
+        completeTest();
+    }
+}
+
+function showStimulus() {
+    if (!testState.isRunning) return;
+
+    const number = Math.floor(Math.random() * 9) + 1;
+    testState.currentNumber = number;
+    testState.stimulusStartTime = Date.now();
+    testState.hasResponded = false;
+
+    const display = document.getElementById('targetDisplay');
+    display.textContent = number;
+    display.className = 'target-number';
+
+    const btn = document.getElementById('responseBtn');
+    if (number === 7) {
+        display.classList.add('stress');
+        btn.classList.add('target');
+        btn.textContent = 'PRESS NOW!';
+    } else {
+        btn.classList.remove('target');
+        btn.textContent = 'Wait for 7...';
+    }
+}
+
+function recordResponse() {
+    if (!testState.isRunning) return;
+
+    const isTarget = testState.currentNumber === 7;
+
+    if (testState.hasResponded) return;
+    testState.hasResponded = true;
+
+    if (isTarget) {
+        testState.correct++;
+        document.getElementById('correctCount').textContent = testState.correct;
+    } else {
+        testState.wrong++;
+        document.getElementById('wrongCount').textContent = testState.wrong;
+    }
+}
+
+function checkMissed() {
+    if (testState.isRunning &&
+        testState.currentNumber === 7 &&
+        !testState.hasResponded &&
+        testState.stimulusStartTime &&
+        Date.now() - testState.stimulusStartTime > 1200) {
+
+        testState.missed++;
+        document.getElementById('missedCount').textContent = testState.missed;
+        testState.currentNumber = null;
+    }
+}
+
+async function triggerHorrorEvent(event) {
+    testState.isRunning = false;
+    clearInterval(stimulusTimer);
+    clearInterval(missedCheckTimer);
+
+    switch(event.type) {
+        case 'virus_warning':
+            await triggerVirusWarning(event.duration);
+            break;
+        case 'flash_then_horror':
+            await triggerFlashThenHorror(event.image, event.duration);
+            break;
+        case 'static_then_horror':
+            await triggerStaticThenHorror(event.image, event.duration);
+            break;
+        case 'bsod_then_horror':
+            await triggerBSODThenHorror(event.image, event.duration);
+            break;
+        case 'rsod_then_horror':
+            await triggerRSODThenHorror(event.image, event.duration);
+            break;
+        case 'blackscreen':
+            await triggerBlackscreen(event.duration);
+            break;
+        case 'blackscreen_horror':
+            await triggerBlackscreenThenHorror(event.image, event.duration);
+            break;
+        case 'final_horror':
+            await triggerFinalHorror(event.image, event.duration);
+            break;
+        case 'grand_finale':
+            await triggerGrandFinale(event.duration);
+            break;
+    }
+
+    hideAllOverlays();
+    stopAllSounds();
+    testState.isRunning = true;
+    stimulusTimer = setInterval(showStimulus, STIMULUS_INTERVAL);
+    missedCheckTimer = setInterval(checkMissed, 100);
+}
+
+async function triggerVirusWarning(duration) {
+    playSound('alarm');
+    const overlay = document.getElementById('virusWarningOverlay');
+    overlay.style.display = 'block';
+
+    let count = 0;
+    const countInterval = setInterval(() => {
+        count += Math.floor(Math.random() * 15) + 5;
+        document.getElementById('virusCount').textContent = count;
+    }, 200);
+
+    setTimeout(() => playSound('alarm'), 2000);
+    setTimeout(() => playSound('glitch'), 4000);
+    setTimeout(() => playSound('alarm'), 6000);
+
+    await sleep(duration);
+    clearInterval(countInterval);
+    overlay.style.display = 'none';
+}
+
+async function triggerFlashThenHorror(imageNum, duration) {
+    const flash = document.getElementById('screenFlash');
+    flash.style.display = 'block';
+    playSound('glitch');
+    await sleep(300);
+    flash.style.display = 'none';
+    await sleep(500);
+    await showHorrorImage(imageNum, duration);
+}
+
+async function triggerStaticThenHorror(imageNum, duration) {
+    const staticOverlay = document.getElementById('staticOverlay');
+    staticOverlay.style.display = 'block';
+    playSound('static');
+
+    const linesContainer = document.getElementById('glitchLines');
+    linesContainer.innerHTML = '';
+    for (let i = 0; i < 8; i++) {
+        const line = document.createElement('div');
+        line.className = 'glitch-line';
+        line.style.top = Math.random() * 100 + '%';
+        line.style.animationDelay = Math.random() * 2 + 's';
+        linesContainer.appendChild(line);
+    }
+
+    await sleep(2000);
+    staticOverlay.style.display = 'none';
+    await sleep(300);
+    await showHorrorImage(imageNum, duration);
+}
+
+async function triggerBSODThenHorror(imageNum, duration) {
+    const bsod = document.getElementById('bsodOverlay');
+    bsod.style.display = 'block';
+    playSound('static');
+
+    let percent = 0;
+    const percentInterval = setInterval(() => {
+        percent += Math.floor(Math.random() * 10);
+        if (percent > 100) percent = 100;
+        document.getElementById('bsodPercent').textContent = percent;
+    }, 150);
+
+    await sleep(3500);
+    clearInterval(percentInterval);
+    bsod.style.display = 'none';
+    await sleep(500);
+    await showHorrorImage(imageNum, duration);
+}
+
+async function triggerRSODThenHorror(imageNum, duration) {
+    const rsod = document.getElementById('rsodOverlay');
+    rsod.style.display = 'block';
+    playSound('alarm');
+
+    let percent = 0;
+    const percentInterval = setInterval(() => {
+        percent += Math.floor(Math.random() * 8);
+        if (percent > 100) percent = 100;
+        document.getElementById('rsodPercent').textContent = percent;
+    }, 200);
+
+    setTimeout(() => playSound('glitch'), 1500);
+
+    await sleep(3500);
+    clearInterval(percentInterval);
+    rsod.style.display = 'none';
+    await sleep(500);
+    await showHorrorImage(imageNum, duration);
+}
+
+async function triggerBlackscreen(duration) {
+    const blackscreen = document.getElementById('blackscreenOverlay');
+    blackscreen.style.display = 'block';
+    playSound('static');
+
+    let percent = 0;
+    const percentInterval = setInterval(() => {
+        percent += Math.floor(Math.random() * 5) + 2;
+        if (percent > 100) percent = 100;
+        document.getElementById('terminalPercent').textContent = percent;
+    }, 300);
+
+    setTimeout(() => playSound('glitch'), 2000);
+    setTimeout(() => playSound('alarm'), 3500);
+
+    await sleep(duration);
+    clearInterval(percentInterval);
+    blackscreen.style.display = 'none';
+}
+
+async function triggerBlackscreenThenHorror(imageNum, duration) {
+    await triggerBlackscreen(3000);
+    await sleep(500);
+    await showHorrorImage(imageNum, duration);
+}
+
+async function triggerFinalHorror(imageNum, duration) {
+    const flash = document.getElementById('screenFlash');
+    for (let i = 0; i < 3; i++) {
+        flash.style.display = 'block';
+        playSound('glitch');
+        await sleep(150);
+        flash.style.display = 'none';
+        await sleep(200);
+    }
+
+    const staticOverlay = document.getElementById('staticOverlay');
+    staticOverlay.style.display = 'block';
+    playSound('static');
+    await sleep(1500);
+    staticOverlay.style.display = 'none';
+
+    await showHorrorImage(imageNum, duration, true);
+}
+
+async function triggerGrandFinale(duration) {
+    // Session 3's final is the most intense
+    const flash = document.getElementById('screenFlash');
+
+    // Triple flash
+    for (let i = 0; i < 3; i++) {
+        flash.style.display = 'block';
+        playSound('glitch');
+        await sleep(100);
+        flash.style.display = 'none';
+        await sleep(150);
+    }
+
+    // Static
+    const staticOverlay = document.getElementById('staticOverlay');
+    staticOverlay.style.display = 'block';
+    playSound('static');
+    await sleep(1000);
+
+    // Flash all images in quick succession
+    staticOverlay.style.display = 'none';
+
+    for (let img = 1; img <= 5; img++) {
+        await showHorrorImage(img, 1500, true);
+        if (img < 5) {
+            flash.style.display = 'block';
+            playSound('glitch');
+            await sleep(100);
+            flash.style.display = 'none';
+            await sleep(200);
+        }
+    }
+}
+
+async function showHorrorImage(imageNum, duration, isFinal = false) {
+    const overlay = document.getElementById('horrorImageOverlay');
+    const img = document.getElementById('horrorImage');
+    const text = document.getElementById('horrorText');
+
+    img.src = `static/horror_images/horror${imageNum}.png`;
+    text.textContent = SESSION_TEXTS[SESSION_NUM][imageNum - 1] || HORROR_TEXTS[imageNum][0];
+
+    if (isFinal) {
+        overlay.classList.add('strobe');
+    }
+
+    // Play image-specific sound combo
+    const soundCombo = IMAGE_SOUND_COMBOS[imageNum] || ['scream'];
+
+    // Play primary sound immediately
+    playSound(soundCombo[0]);
+
+    // Layer additional sounds
+    setTimeout(() => {
+        if (soundCombo[1]) playSound(soundCombo[1]);
+    }, 200);
+
+    setTimeout(() => {
+        if (soundCombo[2]) playSound(soundCombo[2]);
+    }, 500);
+
+    // For final horror, add extra layers
+    if (isFinal) {
+        setTimeout(() => playSound('scream'), 1000);
+        setTimeout(() => playSound('heartbeat'), 2000);
+        setTimeout(() => {
+            if (soundCombo[0]) playSound(soundCombo[0]);
+        }, 3000);
+    }
+
+    overlay.style.display = 'flex';
+
+    await sleep(duration);
+
+    overlay.style.display = 'none';
+    overlay.classList.remove('strobe');
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function hideAllOverlays() {
+    document.getElementById('virusWarningOverlay').style.display = 'none';
+    document.getElementById('horrorImageOverlay').style.display = 'none';
+    document.getElementById('bsodOverlay').style.display = 'none';
+    document.getElementById('rsodOverlay').style.display = 'none';
+    document.getElementById('blackscreenOverlay').style.display = 'none';
+    document.getElementById('staticOverlay').style.display = 'none';
+    document.getElementById('screenFlash').style.display = 'none';
+}
+
+function completeTest() {
+    testState.isRunning = false;
+    clearInterval(progressTimer);
+    clearInterval(stimulusTimer);
+    clearInterval(missedCheckTimer);
+
+    document.getElementById('testPhase').style.display = 'none';
+    document.getElementById('completionPhase').style.display = 'block';
+
+    fetch('/api/attention_complete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            session_num: SESSION_NUM,
+            correct: testState.correct,
+            wrong: testState.wrong,
+            missed: testState.missed
+        })
+    }).catch(() => {});
+}
+
+function continueToNext() {
+    window.location.href = 'content_browsing.html';
+}
+
+document.addEventListener('keydown', (e) => {
+    if (e.code === 'Space' && testState.isRunning) {
+        e.preventDefault();
+        recordResponse();
+    }
+});
+</script>
+
+    </div>
+    
+
+<script>
+/**
+ * SessionManager - Manages New Study flow state
+ * Matches Flask session behavior
+ */
+const SessionManager = {
+    init() {
+        let state = this.getState();
+        if (!state || !state.started) {
+            state = this.createNewFlow();
+        }
+        this.applyToPage(state);
+    },
+
+    getState() {
+        try {
+            return JSON.parse(localStorage.getItem('newStudyFlow'));
+        } catch {
+            return null;
+        }
+    },
+
+    saveState(state) {
+        localStorage.setItem('newStudyFlow', JSON.stringify(state));
+    },
+
+    createNewFlow() {
+        // Randomize condition order (matching Flask)
+        const conditions = ['baseline_r', 'ra_mix', 'state_agnostic'];
+        // For demo: use fixed order
+        const state = {
+            started: true,
+            participantId: 'P' + Math.random().toString(36).substr(2, 6).toUpperCase(),
+            currentSession: 1,
+            conditionOrder: conditions,
+            inductionMethods: ['visual', 'auditory', 'cognitive'],
+            startTime: new Date().toISOString()
+        };
+        this.saveState(state);
+        return state;
+    },
+
+    applyToPage(state) {
+        // Update session display
+        document.querySelectorAll('[data-session-display]').forEach(el => {
+            el.textContent = `Session ${state.currentSession} of 3`;
+        });
+
+        // Update condition
+        const condition = state.conditionOrder[state.currentSession - 1];
+        document.querySelectorAll('[data-condition-display]').forEach(el => {
+            el.textContent = condition === 'baseline_r' ? 'Baseline-R (No Privacy)' :
+                             condition === 'ra_mix' ? 'RA+Mix (Privacy-Preserving)' :
+                             'State-Agnostic (Maximum Privacy)';
+        });
+
+        // Update step dots
+        document.querySelectorAll('.step-dot').forEach((dot, idx) => {
+            dot.classList.remove('completed', 'active');
+            if (idx + 1 < state.currentSession) dot.classList.add('completed');
+            else if (idx + 1 === state.currentSession) dot.classList.add('active');
+        });
+
+        // Update SESSION_NUM and CONDITION JS variables
+        if (typeof SESSION_NUM !== 'undefined') {
+            SESSION_NUM = state.currentSession;
+        }
+    },
+
+    nextSession() {
+        const state = this.getState();
+        if (state.currentSession >= 3) {
+            return 'post_survey.html';
+        } else {
+            state.currentSession++;
+            this.saveState(state);
+            return 'attention_test.html';
+        }
+    },
+
+    reset() {
+        localStorage.removeItem('newStudyFlow');
+    }
+};
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+    SessionManager.init();
+});
+
+// Expose for debugging
+window.SessionManager = SessionManager;
+</script>
+
+<script>
+/**
+ * API Mock - Simulates Flask backend
+ */
+const APIMock = {
+    // WESAD catalog items (12 items from paper)
+    wesadItems: [
+        {id: 'I1', name: 'Deep Breathing Exercise', category: 'wellness', sensitivity: 0.9, utility_stress: 0.95, utility_baseline: 0.3},
+        {id: 'I2', name: 'Progressive Muscle Relaxation', category: 'wellness', sensitivity: 0.85, utility_stress: 0.90, utility_baseline: 0.35},
+        {id: 'I3', name: 'Mindfulness Meditation', category: 'wellness', sensitivity: 0.8, utility_stress: 0.88, utility_baseline: 0.4},
+        {id: 'I4', name: 'Calm Music Playlist', category: 'wellness', sensitivity: 0.75, utility_stress: 0.85, utility_baseline: 0.45},
+        {id: 'I5', name: 'Guided Visualization', category: 'wellness', sensitivity: 0.7, utility_stress: 0.82, utility_baseline: 0.5},
+        {id: 'I6', name: 'Gentle Stretching', category: 'wellness', sensitivity: 0.65, utility_stress: 0.78, utility_baseline: 0.55},
+        {id: 'I7', name: 'Task Manager Tool', category: 'productivity', sensitivity: 0.3, utility_stress: 0.4, utility_baseline: 0.9},
+        {id: 'I8', name: 'Email Template Library', category: 'productivity', sensitivity: 0.25, utility_stress: 0.35, utility_baseline: 0.88},
+        {id: 'I9', name: 'Meeting Scheduler', category: 'productivity', sensitivity: 0.2, utility_stress: 0.3, utility_baseline: 0.85},
+        {id: 'I10', name: 'Social Media Feed', category: 'social', sensitivity: 0.4, utility_stress: 0.5, utility_baseline: 0.8},
+        {id: 'I11', name: 'Stress Tracking Dashboard', category: 'high_sens', sensitivity: 1.0, utility_stress: 0.95, utility_baseline: 0.2},
+        {id: 'I12', name: 'Mood Journal', category: 'high_sens', sensitivity: 0.95, utility_stress: 0.92, utility_baseline: 0.25}
+    ],
+
+    getRecommendations(condition, state, top_k=12) {
+        const items = [...this.wesadItems];
+        let result = [];
+
+        if (condition === 'baseline_r') {
+            // Pure stress-based: I1-I6 first
+            result = items.filter(i => i.category === 'wellness')
+                          .sort((a, b) => b.utility_stress - a.utility_stress);
+        } else if (condition === 'state_agnostic') {
+            // Fixed: productivity + high-sens mix
+            result = items.filter(i => i.category === 'productivity' || i.category === 'high_sens')
+                          .sort(() => Math.random() - 0.5);
+        } else {
+            // ra_mix: diverse mix
+            result = [
+                items.find(i => i.id === 'I2'),
+                items.find(i => i.id === 'I3'),
+                items.find(i => i.id === 'I7'),
+                items.find(i => i.id === 'I8'),
+                items.find(i => i.id === 'I9'),
+                items.find(i => i.id === 'I10'),
+                items.find(i => i.id === 'I1'),
+                items.find(i => i.id === 'I5')
+            ];
+        }
+
+        return result.slice(0, top_k);
+    }
+};
+
+// Override fetch
+const _originalFetch = window.fetch;
+window.fetch = function(url, options) {
+    console.log('[API Mock]', url);
+
+    // WESAD recommendations
+    if (url.includes('/api/wesad_recommendations')) {
+        const params = new URLSearchParams(url.split('?')[1]);
+        const condition = params.get('condition') || 'baseline_r';
+        const state = params.get('state') || 'stress';
+
+        const recs = APIMock.getRecommendations(condition, state);
+
+        return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({
+                recommendations: recs,
+                condition: condition,
+                state: state
+            })
+        });
+    }
+
+    // Log event
+    if (url.includes('/api/log_event') || url.includes('/api/wesad_log_event')) {
+        return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({status: 'logged', success: true})
+        });
+    }
+
+    // Session endpoints
+    if (url.includes('/session/')) {
+        return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({success: true, session_id: 'demo_' + Date.now()})
+        });
+    }
+
+    // Induction trigger
+    if (url.includes('/induction_trigger/')) {
+        const state = SessionManager.getState();
+        const condition = state.conditionOrder[state.currentSession - 1];
+
+        return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({
+                status: 'induction_triggered',
+                session_num: state.currentSession,
+                condition: condition,
+                redirect: 'content_browsing.html'
+            })
+        });
+    }
+
+    // Feedback
+    if (url.includes('/api/session_feedback')) {
+        return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({status: 'success'})
+        });
+    }
+
+    return _originalFetch.apply(this, arguments);
+};
+</script>
+
+<script>
+// Form and button navigation
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle forms
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            const consent = formData.get('consent_given');
+            const currentPage = window.location.pathname.split('/').pop();
+
+            let nextPage = '';
+
+            // Matching Flask routes exactly
+            if (currentPage === 'consent_new.html') {
+                nextPage = consent === 'yes' ? 'baseline_new.html' : 'consent_declined.html';
+            } else if (currentPage === 'baseline_new.html') {
+                nextPage = 'instructions_blind.html';
+            } else if (currentPage === 'post_survey.html') {
+                nextPage = 'debrief.html';
+            } else {
+                nextPage = 'index.html';
+            }
+
+            console.log('[NAV] Form:', currentPage, '->', nextPage);
+            window.location.href = nextPage;
+        });
+    });
+
+    // Handle goToNext in content_browsing
+    if (typeof goToNext === 'function') {
+        const originalGoToNext = goToNext;
+        window.goToNext = function() {
+            const nextPage = SessionManager.nextSession();
+            console.log('[NAV] goToNext ->', nextPage);
+            window.location.href = nextPage;
+        };
+    }
+});
+</script>
+</body>
+</html>

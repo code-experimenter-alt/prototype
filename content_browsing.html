@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="-1">
+    <title></title>
+    <link rel="stylesheet" href="static/css/style.css">
+    
+</head>
+<body>
+
+<div style="background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 20px; text-align: center; font-size: 14px; position: sticky; top: 0; z-index: 10000; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+    <strong>Demo Mode</strong> - Static demonstration of New Study flow. Data not saved.
+    <a href="https://github.com/yourusername/music_privacy_prototype" target="_blank" style="color: #ffd700; margin-left: 15px; text-decoration: underline;">View Source</a>
+</div>
+
+    <div class="container">
+        
+<style>
+.browsing-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Timer Bar */
+.timer-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: #e0e0e0;
+    z-index: 1000;
+}
+
+.timer-progress {
+    height: 100%;
+    background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+    transition: width 1s linear;
+}
+
+.timer-text {
+    position: fixed;
+    top: 10px;
+    right: 20px;
+    background: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 18px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    z-index: 1001;
+}
+
+/* Session Header */
+.session-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 15px;
+    color: white;
+}
+
+.session-title {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.session-subtitle {
+    font-size: 14px;
+    opacity: 0.9;
+    margin-top: 5px;
+}
+
+/* Section Headers */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 0 10px;
+}
+
+.section-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.recommended-badge {
+    background: #28a745;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+.not-recommended-badge {
+    background: #6c757d;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+/* Horizontal Scroll Container */
+.scroll-container {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding: 20px 10px;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+.scroll-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.scroll-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+/* Content Cards */
+.content-card {
+    flex: 0 0 280px;
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.content-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.content-card.recommended {
+    border-color: #28a745;
+    background: linear-gradient(135deg, #f8fff8 0%, #ffffff 100%);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.card-icon {
+    font-size: 40px;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    border-radius: 12px;
+}
+
+.card-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+}
+
+.card-desc {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.card-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-select {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    background: #007bff;
+    color: white;
+    transition: all 0.2s;
+}
+
+.btn-select:hover {
+    background: #0056b3;
+}
+
+.btn-select.selected {
+    background: #28a745;
+}
+
+/* Feedback Section */
+.feedback-section {
+    background: #f8f9fa;
+    padding: 30px;
+    border-radius: 16px;
+    margin: 40px 0;
+    display: none;
+}
+
+.feedback-section.show {
+    display: block;
+}
+
+.feedback-title {
+    font-size: 24px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.feedback-subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.rating-item {
+    margin-bottom: 25px;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+}
+
+.rating-label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.rating-slider {
+    width: 100%;
+    height: 8px;
+    border-radius: 4px;
+    background: #e0e0e0;
+    outline: none;
+    -webkit-appearance: none;
+}
+
+.rating-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #007bff;
+    cursor: pointer;
+}
+
+.rating-value {
+    display: inline-block;
+    margin-left: 10px;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 15px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.btn-submit:hover {
+    background: #218838;
+}
+
+/* Navigation */
+.nav-section {
+    text-align: center;
+    padding: 30px;
+    display: none;
+}
+
+.nav-section.show {
+    display: block;
+}
+
+.btn-next {
+    padding: 15px 50px;
+    font-size: 16px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-next:hover {
+    background: #0056b3;
+}
+
+/* Scroll hint */
+.scroll-hint {
+    text-align: center;
+    color: #999;
+    font-size: 14px;
+    margin-top: 10px;
+}
+</style>
+
+<!-- Timer Bar -->
+<div class="timer-bar">
+    <div class="timer-progress" id="timerProgress" style="width: 100%;"></div>
+</div>
+<div class="timer-text" id="timerText">60s</div>
+
+<div class="browsing-container">
+    <!-- Header -->
+    <div class="session-header">
+        <h1 class="session-title">Recommended For You</h1>
+        <div class="session-subtitle">Session 1 of 3 • Browse and select content that interests you</div>
+    </div>
+
+    <!-- Recommended Section -->
+    <div class="content-section">
+        <div class="section-header">
+            <div class="section-title">
+                Recommended
+                <span class="recommended-badge">For You</span>
+            </div>
+        </div>
+        <div class="scroll-container" id="recommendedContainer">
+            <!-- Recommended items will be inserted here -->
+        </div>
+        <div class="scroll-hint">← Scroll horizontally to see more →</div>
+    </div>
+
+    <!-- Not Recommended Section -->
+    <div class="content-section">
+        <div class="section-header">
+            <div class="section-title">
+                Not Recommended
+                <span class="not-recommended-badge">Browse</span>
+            </div>
+        </div>
+        <div class="scroll-container" id="notRecommendedContainer">
+            <!-- Not recommended items will be inserted here -->
+        </div>
+        <div class="scroll-hint">← Scroll horizontally to see more →</div>
+    </div>
+
+    <!-- Feedback Form -->
+    <div class="feedback-section" id="feedbackSection">
+        <h2 class="feedback-title">Quick Feedback</h2>
+        <p class="feedback-subtitle">Help us improve your experience</p>
+
+        <div class="rating-item">
+            <label class="rating-label">How satisfied were you with the recommendations? <span class="rating-value" id="satValue">3</span>/5</label>
+            <input type="range" class="rating-slider" id="satisfaction" min="1" max="5" value="3" oninput="document.getElementById('satValue').textContent = this.value">
+        </div>
+
+        <div class="rating-item">
+            <label class="rating-label">How concerned are you about privacy? <span class="rating-value" id="privValue">3</span>/5</label>
+            <input type="range" class="rating-slider" id="privacyConcern" min="1" max="5" value="3" oninput="document.getElementById('privValue').textContent = this.value">
+        </div>
+
+        <div class="rating-item">
+            <label class="rating-label">How accurate were the recommendations? <span class="rating-value" id="accValue">3</span>/5</label>
+            <input type="range" class="rating-slider" id="perceivedAccuracy" min="1" max="5" value="3" oninput="document.getElementById('accValue').textContent = this.value">
+        </div>
+
+        <div class="rating-item">
+            <label class="rating-label">Would you use this system again?</label>
+            <select id="wouldUseAgain" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd;">
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+            </select>
+        </div>
+
+        <div class="rating-item">
+            <label class="rating-label">Any additional comments?</label>
+            <textarea id="comments" rows="3" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd; resize: vertical;"></textarea>
+        </div>
+
+        <button class="btn-submit" onclick="submitFeedback()">Submit Feedback</button>
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav-section" id="navSection">
+        <button class="btn-next" onclick="goToNext()">Continue to Next Session →</button>
+    </div>
+</div>
+
+<script>
+let SESSION_NUM = 1;
+let CONDITION = 'baseline_r';
+const SESSION_DURATION = 60;
+
+let timeRemaining = SESSION_DURATION;
+let selectedItems = new Set();
+
+// Content item info
+const CONTENT_INFO = {
+    'I1': { icon: '🧘', title: 'Box Breathing', desc: '2-minute guided breathing for stress relief' },
+    'I2': { icon: '🎵', title: 'Peaceful Piano', desc: 'Calming instrumental music playlist' },
+    'I3': { icon: '🌊', title: 'Ocean Sounds', desc: 'Nature sounds for relaxation and sleep' },
+    'I4': { icon: '📖', title: 'Sleep Story', desc: 'Soothing narrated bedtime story' },
+    'I5': { icon: '🏃', title: 'Desk Stretches', desc: 'Quick office-friendly exercises' },
+    'I6': { icon: '🎧', title: 'Lo-Fi Beats', desc: 'Chill background music for focus' },
+    'I7': { icon: '🌿', title: 'Nature Walk', desc: 'Guided meditation in nature' },
+    'I8': { icon: '📊', title: 'Focus Timer', desc: 'Pomodoro productivity tool' },
+    'I9': { icon: '😄', title: 'Comedy Break', desc: 'Short funny video clips' },
+    'I10': { icon: '☕', title: 'Coffee Chat', desc: 'Casual conversation podcast' },
+    'I11': { icon: '📞', title: 'Support Line', desc: 'Mental health resources' },
+    'I12': { icon: '🏥', title: 'Wellness Check', desc: 'Self-care assessment tool' }
+};
+
+function startTimer() {
+    const timerInterval = setInterval(() => {
+        timeRemaining--;
+        document.getElementById('timerText').textContent = timeRemaining + 's';
+        document.getElementById('timerProgress').style.width = (timeRemaining / SESSION_DURATION * 100) + '%';
+
+        if (timeRemaining <= 0) {
+            clearInterval(timerInterval);
+            showFeedbackForm();
+        }
+    }, 1000);
+}
+
+function showFeedbackForm() {
+    document.getElementById('feedbackSection').classList.add('show');
+    document.getElementById('feedbackSection').scrollIntoView({ behavior: 'smooth' });
+}
+
+function submitFeedback() {
+    const feedback = {
+        session_num: SESSION_NUM,
+        condition: CONDITION,
+        satisfaction: parseInt(document.getElementById('satisfaction').value),
+        privacy_concern: parseInt(document.getElementById('privacyConcern').value),
+        perceived_accuracy: parseInt(document.getElementById('perceivedAccuracy').value),
+        would_use_again: parseInt(document.getElementById('wouldUseAgain').value),
+        comments: document.getElementById('comments').value
+    };
+
+    fetch('/api/session_feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(feedback)
+    })
+    .then(() => {
+        document.getElementById('feedbackSection').style.display = 'none';
+        document.getElementById('navSection').classList.add('show');
+        document.getElementById('navSection').scrollIntoView({ behavior: 'smooth' });
+    })
+    .catch(err => {
+        console.error('Feedback error:', err);
+        document.getElementById('feedbackSection').style.display = 'none';
+        document.getElementById('navSection').classList.add('show');
+    });
+}
+
+function goToNext() {
+    // Get current state
+    const state = SessionManager.getState();
+    const currentSession = state ? state.currentSession : SESSION_NUM;
+
+    console.log('[goToNext] Current session:', currentSession);
+
+    if (currentSession < 3) {
+        // Use SessionManager.nextSession() to increment and get next page
+        const nextPage = SessionManager.nextSession();
+        console.log('[goToNext] Navigating to:', nextPage, 'New session:', SessionManager.getState()?.currentSession);
+        window.location.href = nextPage;
+    } else {
+        console.log('[goToNext] Session 3 complete, going to post_survey');
+        window.location.href = 'post_survey.html';
+    }
+}
+
+function loadRecommendations() {
+    // Get current session state
+    const state = SessionManager.getState();
+    if (state) {
+        SESSION_NUM = state.currentSession;
+        CONDITION = state.conditionOrder[state.currentSession - 1];
+        // Update session display
+        const sessionSubtitle = document.querySelector('.session-subtitle');
+        if (sessionSubtitle) {
+            sessionSubtitle.textContent = `Session ${SESSION_NUM} of 3 • Condition: ${CONDITION}`;
+        }
+    }
+
+    fetch('/api/wesad_recommendations?session_num=' + SESSION_NUM + '&condition=' + CONDITION + '&top_k=12')
+        .then(r => r.json())
+        .then(data => {
+            const recContainer = document.getElementById('recommendedContainer');
+            const notRecContainer = document.getElementById('notRecommendedContainer');
+
+            if (data.recommendations) {
+                // Split into recommended (first 6) and not recommended (last 6)
+                const recommended = data.recommendations.slice(0, 6);
+                const notRecommended = data.recommendations.slice(6);
+
+                recommended.forEach(item => {
+                    const card = createCard(item, true);
+                    recContainer.appendChild(card);
+                });
+
+                notRecommended.forEach(item => {
+                    const card = createCard(item, false);
+                    notRecContainer.appendChild(card);
+                });
+            }
+        });
+}
+
+function createCard(item, isRecommended) {
+    const info = CONTENT_INFO[item.id] || { icon: '📦', title: item.name, desc: 'Content item' };
+    const div = document.createElement('div');
+    div.className = 'content-card ' + (isRecommended ? 'recommended' : '');
+    div.innerHTML = `
+        <div class="card-header">
+            <div class="card-icon">${info.icon}</div>
+            <div class="card-title">${info.title}</div>
+        </div>
+        <div class="card-desc">${info.desc}</div>
+        <div class="card-actions">
+            <button class="btn-select" onclick="toggleSelect(this, '${item.id}')">Select</button>
+        </div>
+    `;
+    return div;
+}
+
+function toggleSelect(btn, itemId) {
+    if (selectedItems.has(itemId)) {
+        selectedItems.delete(itemId);
+        btn.classList.remove('selected');
+        btn.textContent = 'Select';
+    } else {
+        selectedItems.add(itemId);
+        btn.classList.add('selected');
+        btn.textContent = 'Selected ✓';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadRecommendations();
+    startTimer();
+});
+</script>
+
+    </div>
+    
+
+<script>
+/**
+ * SessionManager - Manages New Study flow state
+ * Matches Flask session behavior
+ */
+const SessionManager = {
+    init() {
+        let state = this.getState();
+        if (!state || !state.started) {
+            state = this.createNewFlow();
+        }
+        this.applyToPage(state);
+    },
+
+    getState() {
+        try {
+            return JSON.parse(localStorage.getItem('newStudyFlow'));
+        } catch {
+            return null;
+        }
+    },
+
+    saveState(state) {
+        localStorage.setItem('newStudyFlow', JSON.stringify(state));
+    },
+
+    createNewFlow() {
+        // Randomize condition order (matching Flask)
+        const conditions = ['baseline_r', 'ra_mix', 'state_agnostic'];
+        // For demo: use fixed order
+        const state = {
+            started: true,
+            participantId: 'P' + Math.random().toString(36).substr(2, 6).toUpperCase(),
+            currentSession: 1,
+            conditionOrder: conditions,
+            inductionMethods: ['visual', 'auditory', 'cognitive'],
+            startTime: new Date().toISOString()
+        };
+        this.saveState(state);
+        return state;
+    },
+
+    applyToPage(state) {
+        // Update session display
+        document.querySelectorAll('[data-session-display]').forEach(el => {
+            el.textContent = `Session ${state.currentSession} of 3`;
+        });
+
+        // Update condition
+        const condition = state.conditionOrder[state.currentSession - 1];
+        document.querySelectorAll('[data-condition-display]').forEach(el => {
+            el.textContent = condition === 'baseline_r' ? 'Baseline-R (No Privacy)' :
+                             condition === 'ra_mix' ? 'RA+Mix (Privacy-Preserving)' :
+                             'State-Agnostic (Maximum Privacy)';
+        });
+
+        // Update step dots
+        document.querySelectorAll('.step-dot').forEach((dot, idx) => {
+            dot.classList.remove('completed', 'active');
+            if (idx + 1 < state.currentSession) dot.classList.add('completed');
+            else if (idx + 1 === state.currentSession) dot.classList.add('active');
+        });
+
+        // Update SESSION_NUM and CONDITION JS variables if they exist (and are not const)
+        if (typeof SESSION_NUM !== 'undefined') {
+            SESSION_NUM = state.currentSession;
+        }
+        if (typeof CONDITION !== 'undefined') {
+            CONDITION = condition;
+        }
+    },
+
+    nextSession() {
+        const state = this.getState();
+        if (state.currentSession >= 3) {
+            return 'post_survey.html';
+        } else {
+            state.currentSession++;
+            this.saveState(state);
+            // Update local variables too
+            SESSION_NUM = state.currentSession;
+            CONDITION = state.conditionOrder[state.currentSession - 1];
+            return 'attention_test.html';
+        }
+    },
+
+    reset() {
+        localStorage.removeItem('newStudyFlow');
+    }
+};
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+    SessionManager.init();
+});
+
+// Expose for debugging
+window.SessionManager = SessionManager;
+</script>
+
+<script>
+/**
+ * API Mock - Simulates Flask backend
+ */
+const APIMock = {
+    // WESAD catalog items (12 items from paper)
+    wesadItems: [
+        {id: 'I1', name: 'Deep Breathing Exercise', category: 'wellness', sensitivity: 0.9, utility_stress: 0.95, utility_baseline: 0.3},
+        {id: 'I2', name: 'Progressive Muscle Relaxation', category: 'wellness', sensitivity: 0.85, utility_stress: 0.90, utility_baseline: 0.35},
+        {id: 'I3', name: 'Mindfulness Meditation', category: 'wellness', sensitivity: 0.8, utility_stress: 0.88, utility_baseline: 0.4},
+        {id: 'I4', name: 'Calm Music Playlist', category: 'wellness', sensitivity: 0.75, utility_stress: 0.85, utility_baseline: 0.45},
+        {id: 'I5', name: 'Guided Visualization', category: 'wellness', sensitivity: 0.7, utility_stress: 0.82, utility_baseline: 0.5},
+        {id: 'I6', name: 'Gentle Stretching', category: 'wellness', sensitivity: 0.65, utility_stress: 0.78, utility_baseline: 0.55},
+        {id: 'I7', name: 'Task Manager Tool', category: 'productivity', sensitivity: 0.3, utility_stress: 0.4, utility_baseline: 0.9},
+        {id: 'I8', name: 'Email Template Library', category: 'productivity', sensitivity: 0.25, utility_stress: 0.35, utility_baseline: 0.88},
+        {id: 'I9', name: 'Meeting Scheduler', category: 'productivity', sensitivity: 0.2, utility_stress: 0.3, utility_baseline: 0.85},
+        {id: 'I10', name: 'Social Media Feed', category: 'social', sensitivity: 0.4, utility_stress: 0.5, utility_baseline: 0.8},
+        {id: 'I11', name: 'Stress Tracking Dashboard', category: 'high_sens', sensitivity: 1.0, utility_stress: 0.95, utility_baseline: 0.2},
+        {id: 'I12', name: 'Mood Journal', category: 'high_sens', sensitivity: 0.95, utility_stress: 0.92, utility_baseline: 0.25}
+    ],
+
+    getRecommendations(condition, state, top_k=12) {
+        const items = [...this.wesadItems];
+        let result = [];
+
+        if (condition === 'baseline_r') {
+            // Pure stress-based: I1-I6 first
+            result = items.filter(i => i.category === 'wellness')
+                          .sort((a, b) => b.utility_stress - a.utility_stress);
+        } else if (condition === 'state_agnostic') {
+            // Fixed: productivity + high-sens mix
+            result = items.filter(i => i.category === 'productivity' || i.category === 'high_sens')
+                          .sort(() => Math.random() - 0.5);
+        } else {
+            // ra_mix: diverse mix
+            result = [
+                items.find(i => i.id === 'I2'),
+                items.find(i => i.id === 'I3'),
+                items.find(i => i.id === 'I7'),
+                items.find(i => i.id === 'I8'),
+                items.find(i => i.id === 'I9'),
+                items.find(i => i.id === 'I10'),
+                items.find(i => i.id === 'I1'),
+                items.find(i => i.id === 'I5')
+            ];
+        }
+
+        return result.slice(0, top_k);
+    }
+};
+
+// Override fetch
+const _originalFetch = window.fetch;
+window.fetch = function(url, options) {
+    console.log('[API Mock]', url);
+
+    // WESAD recommendations
+    if (url.includes('/api/wesad_recommendations')) {
+        const params = new URLSearchParams(url.split('?')[1]);
+        const condition = params.get('condition') || 'baseline_r';
+        const state = params.get('state') || 'stress';
+
+        const recs = APIMock.getRecommendations(condition, state);
+
+        return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({
+                recommendations: recs,
+                condition: condition,
+                state: state
+            })
+        });
+    }
+
+    // Log event
+    if (url.includes('/api/log_event') || url.includes('/api/wesad_log_event')) {
+        return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({status: 'logged', success: true})
+        });
+    }
+
+    // Session endpoints
+    if (url.includes('/session/')) {
+        return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({success: true, session_id: 'demo_' + Date.now()})
+        });
+    }
+
+    // Induction trigger
+    if (url.includes('/induction_trigger/')) {
+        const state = SessionManager.getState();
+        const condition = state.conditionOrder[state.currentSession - 1];
+
+        return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({
+                status: 'induction_triggered',
+                session_num: state.currentSession,
+                condition: condition,
+                redirect: 'content_browsing.html'
+            })
+        });
+    }
+
+    // Feedback
+    if (url.includes('/api/session_feedback')) {
+        return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({status: 'success'})
+        });
+    }
+
+    return _originalFetch.apply(this, arguments);
+};
+</script>
+
+<script>
+// Form and button navigation
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle forms
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            const consent = formData.get('consent_given');
+            const currentPage = window.location.pathname.split('/').pop();
+
+            let nextPage = '';
+
+            // Matching Flask routes exactly
+            if (currentPage === 'consent_new.html') {
+                nextPage = consent === 'yes' ? 'baseline_new.html' : 'consent_declined.html';
+            } else if (currentPage === 'baseline_new.html') {
+                nextPage = 'instructions_blind.html';
+            } else if (currentPage === 'post_survey.html') {
+                nextPage = 'debrief.html';
+            } else {
+                nextPage = 'index.html';
+            }
+
+            console.log('[NAV] Form:', currentPage, '->', nextPage);
+            window.location.href = nextPage;
+        });
+    });
+
+    // goToNext function is already defined above
+    // It will handle navigation to next session or post_survey
+});
+</script>
+</body>
+</html>
