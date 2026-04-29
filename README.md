@@ -220,5 +220,5 @@ require Flask backend deployment.
 
 ---
 
-**生成日期**: 2024
+**生成日期**: 2026
 **匹配版本**: Flask app.py (New Study flow)
